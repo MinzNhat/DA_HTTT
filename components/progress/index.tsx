@@ -10,7 +10,7 @@ type Props = {
 const Progress: FC<Props> = ({ value, color, width, bgColor }) => {
   return (
     <div
-      className={`h-2 ${width ? width : "w-full"
+      className={`h-3 ${width ? width : "w-full"
         } rounded-full ${bgColor ? bgColor : "bg-gray-200 dark:bg-navy-700"
         }`}
     >
@@ -18,7 +18,7 @@ const Progress: FC<Props> = ({ value, color, width, bgColor }) => {
         className={`flex h-full items-center justify-center rounded-full ${color === "red"
           ? "bg-red-500 dark:bg-red-400"
           : color === "blue"
-            ? "bg-blue-500 dark:bg-blue-400"
+            ? "bg-blue-600 dark:bg-blue-400"
             : color === "green"
               ? "bg-green-500 dark:bg-green-400"
               : color === "yellow"

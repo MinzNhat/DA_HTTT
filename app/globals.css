@@ -88,7 +88,7 @@ input:checked.defaultCheckbox::before {
 	font-size: 28px;
 	font-weight: bold;
 	color: #fff;
-	padding: 8px;
+	padding: 12px;
 	border-left: 8px solid #0005;
 	border-bottom: 16px solid #0000;
 	clip-path: polygon(8px 0,

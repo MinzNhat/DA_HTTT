@@ -8,5 +8,7 @@
     "routes.Loading...": "Đang tải...",
     "Notification.Title": "Thông báo",
     "Notification.Close": "Đóng",
-    "Notification.Submit": "Xác nhận"
+    "Notification.Submit": "Xác nhận",
+    "Login.Login": "Đăng nhập",
+    "Login.Login2": "Nhập tên tài khoản và mật khẩu để đăng nhập!"
 }

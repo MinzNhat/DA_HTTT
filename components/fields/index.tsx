@@ -96,7 +96,7 @@ const InputField: FC<Props> = ({
           <RenderCase renderIf={!!label}>
             <label
               htmlFor={id}
-              className={`text-sm text-navy-700 dark:text-white ${variant === "auth" ? "ml-1.5 font-medium" : "ml-3 font-bold"
+              className={` text-navy-700 dark:text-white ${variant ? "ml-1.5 font-medium text-md" : "ml-3 font-bold text-sm"
                 }`}
             >
               {label}
