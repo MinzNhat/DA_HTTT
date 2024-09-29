@@ -37,7 +37,7 @@ type Props = {
 };
 
 export default function ThemeProvider({ children }: Props) {
-    const [theme, setTheme] = useState<'light' | 'dark'>(getInitialTheme);
+    const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
     const rawSetTheme = (rawTheme: string) => {
         const root = window.document.documentElement;
