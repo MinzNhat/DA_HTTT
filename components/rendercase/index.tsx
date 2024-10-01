@@ -1,7 +1,7 @@
 import { FC } from "react";
 
 type Props = {
-    children: string | JSX.Element
+    children: string | JSX.Element | React.ReactNode
     renderIf: boolean
 }
 

@@ -28,7 +28,7 @@ const Progress: FC<Props> = ({ value, color, width, bgColor }) => {
                   : color === "teal"
                     ? "bg-teal-500 dark:bg-teal-400"
                     : color === "navy"
-                      ? "bg-navy-500 dark:bg-navy-400"
+                      ? "bg-navy-700 dark:bg-blue-400"
                       : color === "lime"
                         ? "bg-lime-500 dark:bg-lime-400"
                         : color === "cyan"

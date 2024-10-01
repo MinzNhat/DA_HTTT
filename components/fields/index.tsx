@@ -22,7 +22,7 @@ type Props = {
   extra?: any;
   type?: HTMLInputTypeAttribute;
   placeholder?: string;
-  variant?: any;
+  variant?: boolean;
   state?: "error" | "success" | string;
   disabled?: boolean;
   className?: string;
@@ -116,12 +116,12 @@ const InputField: FC<Props> = ({
               type={type === "password" && showPassword ? "text" : type}
               id={id}
               placeholder={type === "date" ? "" : placeholder}
-              className={`flex ${variant == "auth1" ? "h-10" : "h-12"
+              className={`flex ${variant ? "h-10" : "h-12"
                 } w-full items-center justify-center rounded-xl border ${className ? className : "bg-white/0"
                 } p-3 text-sm outline-none duration-300 ${disabled
                   ? "!border-none !bg-gray-100 dark:!bg-white/5 dark:placeholder:!text-[rgba(255,255,255,0.15)]"
                   : state === "error"
-                    ? "border-red-500 text-red-500 placeholder:text-red-500 dark:!border-red-400 dark:!text-red-400 dark:placeholder:!text-red-400"
+                    ? "border-red-500 dark:!border-2 text-red-500 placeholder:text-red-500 dark:!border-red-400 dark:!text-red-400 dark:placeholder:!text-red-400"
                     : state === "success"
                       ? "border-green-500 text-green-500 placeholder:text-green-500 dark:!border-green-400 dark:!text-green-400 dark:placeholder:!text-green-400"
                       : "border-gray-200 dark:border-white/10 focus:border-blueSecondary dark:focus:border-blueSecondary dark:text-white"
@@ -131,7 +131,7 @@ const InputField: FC<Props> = ({
             <RenderCase renderIf={type == "password"}>
               <button
                 onClick={togglePasswordVisibility}
-                className="absolute top-1/2 right-3 transform -translate-y-1/2 bg-transparent focus:outline-none text-gray-500"
+                className={`absolute top-1/2 right-3 transform -translate-y-1/2 bg-transparent focus:outline-none ${state == "error" ? "text-red-500 dark:!text-red-400" : "text-gray-500"}`}
               >
                 {showPassword ? <FiEyeOff /> : <FiEye />}
               </button>

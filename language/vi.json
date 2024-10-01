@@ -10,5 +10,12 @@
     "Notification.Close": "Đóng",
     "Notification.Submit": "Xác nhận",
     "Login.Login": "Đăng nhập",
-    "Login.Login2": "Nhập tên tài khoản và mật khẩu để đăng nhập!"
+    "Login.Login2": "Nhập tên tài khoản và mật khẩu để đăng nhập!",
+    "Login.Login3": "Đăng ký",
+    "Login.Login4": "Nhập các trường thông tin để đăng ký tài khoản!",
+    "Login.Login5": "Quên mật khẩu",
+    "Login.Login6": "Nhập tên email để lấy lại mật khẩu!",
+    "Login.Login7": "Quên mật khẩu",
+    "Login.Login8": "Vui lòng nhập mật khẩu mới để đổi mới",
+    "routes.menu": "Trang chủ"
 }

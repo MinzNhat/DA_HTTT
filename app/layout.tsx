@@ -1,8 +1,6 @@
 import { type Metadata } from 'next'
 import './globals.css'
-import ThemeProvider from '@/providers/ThemeProvider';
-import SettingProvider from '@/providers/SettingProvider';
-import SidebarProvider from '@/providers/SidebarProvider';
+import LayoutStructure from './layoutWrapper'
 
 export const metadata: Metadata = {
   title: 'HCMUT - App',
@@ -16,21 +14,18 @@ export const metadata: Metadata = {
   authors: [{ name: 'nhatdev' }],
   creator: 'nhatdev'
 }
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className='no-scrollbar'>
       <body>
-        <SettingProvider>
-          <ThemeProvider>
-            <SidebarProvider>
-              {children}
-            </SidebarProvider>
-          </ThemeProvider>
-        </SettingProvider>
+        <LayoutStructure>
+          {children}
+        </LayoutStructure>
       </body>
     </html>
   )

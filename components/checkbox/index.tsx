@@ -24,7 +24,7 @@ const Checkbox: FC<Props> = ({ id, className, color, checked, onChange }) => {
       type="checkbox"
       className={`ml-1 pb-1 defaultCheckbox relative flex h-[20px] min-h-[20px] w-[20px] min-w-[20px] appearance-none items-center 
       justify-center rounded-md border border-[#000000] text-white/0 outline-none transition duration-[0.2s]
-      checked:border-none checked:text-white hover:cursor-pointer dark:border-white/10 ${color === "red"
+      checked:border-none checked:text-white hover:cursor-pointer dark:border-white ${color === "red"
           ? "checked:border-none checked:bg-red-500 dark:checked:bg-red-500"
           : color === "blue"
             ? "checked:border-none checked:bg-blue-500 dark:checked:bg-blue-400"
