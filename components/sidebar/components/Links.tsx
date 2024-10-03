@@ -23,7 +23,7 @@ const SidebarLinks = ({ onClickRoute }: Props) => {
 
   useEffect(() => {
     const findActiveRouteIndex = () => {
-      return routes.findIndex(route => route.layout && route.path && pathname.includes(route.path));
+      return routes.findIndex(route => route.path && pathname.includes(route.path));
     };
     setActiveIndex(findActiveRouteIndex());
   }, [pathname]);
