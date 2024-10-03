@@ -27,7 +27,7 @@ export default function Home() {
   const battery = useBattery() as any;
   const formattedTime = useCurrentTime();
   const searchParams = useSearchParams();
-  const initialLocale = searchParams.get('locale') || (typeof window !== 'undefined' && window.localStorage) ? localStorage.getItem('locale') : 'vi';
+  const initialLocale = searchParams.get('locale') || (typeof window !== 'undefined' && window.localStorage) ? localStorage?.getItem('locale') : 'vi';
   const { loading, login, register, forgot } = useUserAuthContext();
   const { theme, setTheme } = useThemeContext();
   const [errorField, setErrorField] = useState<boolean>(false);

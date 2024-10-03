@@ -23,7 +23,7 @@ const LanguageSwitcher: FC<Props> = ({ message, animation, animation2, className
     const handleLanguageSwitch = (selectedLocale: string) => {
         if (locale !== selectedLocale && (typeof window !== 'undefined' && window.localStorage)) {
             setLocale(selectedLocale);
-            localStorage.setItem('locale', selectedLocale);
+            localStorage?.setItem('locale', selectedLocale);
         }
     };
 

@@ -55,9 +55,9 @@ export const UserAuthProvider = ({ children }: Props) => {
 
     const [message, setMessage] = useState<string>("")
     const [openNotification, setOpenNotification] = useState<boolean>(false)
-    const [accessToken, setAccessToken] = useState<string | null>(typeof window !== "undefined" ? localStorage.getItem('accessToken') : null);
-    const [refreshToken, setRefreshToken] = useState<string | null>(typeof window !== "undefined" ? localStorage.getItem('refreshToken') : null);
-    const [sessionExpireTime, setSessionExpireTime] = useState<number | null>(typeof window !== "undefined" ? Number(localStorage.getItem('sessionExpireTime')) : null);
+    const [accessToken, setAccessToken] = useState<string | null>(typeof window !== "undefined" ? localStorage?.getItem('accessToken') : null);
+    const [refreshToken, setRefreshToken] = useState<string | null>(typeof window !== "undefined" ? localStorage?.getItem('refreshToken') : null);
+    const [sessionExpireTime, setSessionExpireTime] = useState<number | null>(typeof window !== "undefined" ? Number(localStorage?.getItem('sessionExpireTime')) : null);
     const [loading, setLoading] = useState<boolean>(false);
 
     const login = async (email: string, password: string, remember: boolean) => {
