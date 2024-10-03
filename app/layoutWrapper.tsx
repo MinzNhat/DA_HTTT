@@ -5,11 +5,15 @@ import { Suspense } from "react";
 import { useSearchParams } from 'next/navigation';
 import { FormattedMessage, IntlProvider } from 'react-intl';
 import SidebarProvider from "@/providers/SidebarProvider";
-import SettingProvider from "@/providers/SettingProvider";
+import SearchProvider from "@/providers/SearchProvider";
 import ThemeProvider from "@/providers/ThemeProvider";
 import { UserAuthProvider } from "@/providers/AuthProvider";
 import OpenAppProvider from "@/providers/OpenAppProvider";
 import PassDataProvider from "@/providers/PassedData";
+
+type LanguageMessages = {
+    [key: string]: any;
+}
 
 export const CustomLoadingElement = () => {
     return (
@@ -19,10 +23,6 @@ export const CustomLoadingElement = () => {
         </div>
     );
 };
-
-type LanguageMessages = {
-    [key: string]: any;
-}
 
 export default function LayoutStructure({
     children,
@@ -43,7 +43,7 @@ export default function LayoutStructure({
     return (
         <IntlProvider messages={messages} locale={locale} defaultLocale={defaultLocale}>
             <UserAuthProvider>
-                <SettingProvider>
+                <SearchProvider>
                     <ThemeProvider>
                         <SidebarProvider>
                             <OpenAppProvider>
@@ -53,7 +53,7 @@ export default function LayoutStructure({
                             </OpenAppProvider>
                         </SidebarProvider>
                     </ThemeProvider>
-                </SettingProvider>
+                </SearchProvider>
             </UserAuthProvider>
         </IntlProvider>
 

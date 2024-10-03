@@ -1,8 +1,7 @@
 'use client'
 
 import { AnimatePresence, motion } from "framer-motion";
-import { useRouter, useSearchParams } from "next/navigation";
-import { FormattedMessage, IntlProvider } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import Carousel from "react-multi-carousel";
 import Image from "next/image";
 import "react-multi-carousel/lib/styles.css";
@@ -16,23 +15,19 @@ import useCurrentTime from "@/hooks/useCurrentTime";
 import { useThemeContext } from "@/providers/ThemeProvider";
 import { RiMoonFill, RiSunFill } from "react-icons/ri";
 import RenderCase from "@/components/rendercase";
-import { UserAuthContext, useUserAuthContext } from "@/providers/AuthProvider";
+import { useUserAuthContext } from "@/providers/AuthProvider";
 import NotiPopup from "@/components/notification";
 import LoadingUI from "@/components/loading";
-
-type LanguageMessages = {
-  [key: string]: any;
-}
+import LanguageSwitcher from "@/components/language";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function Home() {
-  const languages: LanguageMessages = {
-    vi: require('@/language/vi.json'),
-    en: require('@/language/en.json')
-  };
-
-  const router = useRouter();
+  const intl = useIntl()
+  const router = useRouter()
   const battery = useBattery() as any;
   const formattedTime = useCurrentTime();
+  const searchParams = useSearchParams();
+  const initialLocale = searchParams.get('locale') || (typeof window !== 'undefined' && window.localStorage) ? localStorage.getItem('locale') : 'vi';
   const { loading, login, register, forgot } = useUserAuthContext();
   const { theme, setTheme } = useThemeContext();
   const [errorField, setErrorField] = useState<boolean>(false);
@@ -47,12 +42,6 @@ export default function Home() {
   const [openSubmitNotification, setOpenSubmitNotification] = useState<boolean>(false);
   const [openSubmitNotification2, setOpenSubmitNotification2] = useState<boolean>(false);
   const emailRegex = /^[a-zA-Z0-9._-]{1,64}@[a-zA-Z0-9._-]{1,255}\.[a-zA-Z]{2,4}$/;
-
-  const defaultLocale = 'vi';
-  const searchParams = useSearchParams();
-  const locale = searchParams.get('locale') || 'vi';
-  const messages = languages[locale];
-
   const { isSupported, level, charging, dischargingTime, chargingTime } = battery;
 
   const divVariants = {
@@ -70,19 +59,19 @@ export default function Home() {
 
   const submit = async () => {
     if (!account || (form != 2 && !password) || (form == 1 && (!password2 || !name))) {
-      setMessage("Vui lòng nhập đầy đủ thông tin")
+      setMessage(intl.formatMessage({ id: "Login.Message1" }))
       setErrorField(true)
       setOpenNotification(true)
       return;
     } else if (!emailRegex.test(account)) {
-      setMessage("Vui lòng nhập đúng định dạng tài khoản")
+      setMessage(intl.formatMessage({ id: "Login.Message2" }))
       setErrorField(true)
       setOpenNotification(true)
       return;
     }
 
     if (form == 1 && password != password2) {
-      setMessage("Mật khẩu không khớp, vui lòng thử lại")
+      setMessage(intl.formatMessage({ id: "Login.Message3" }))
       setErrorField(true)
       setOpenNotification(true)
       return;
@@ -93,42 +82,42 @@ export default function Home() {
     if (form == 0) {
       const error = await login(account, password, rememberMe)
       if (!loading && !error) {
-        setMessage("Xác thực đăng nhập tài khoản thành công")
+        setMessage(intl.formatMessage({ id: "Login.Message4" }))
         setOpenSubmitNotification(true)
       } else if (!loading && error) {
-        setMessage("Xác thực đăng nhập thất bại, vui lòng kiểm tra lại")
+        setMessage(intl.formatMessage({ id: "Login.Message5" }))
         setOpenNotification(true)
       }
     } else if (form == 1) {
       const error = await register(name, account, password, password2)
       if (!loading && !error) {
-        setMessage("Đăng ký thành công, vui lòng kiểm tra email để kích hoạt tài khoản")
+        setMessage(intl.formatMessage({ id: "Login.Message6" }))
         setOpenSubmitNotification2(true)
       } else if (!loading && error) {
-        setMessage("Đăng ký tài khoản thất bại, vui lòng thử lại với mật khẩu khác hoặc đăng nhập nếu tài khoản với email này đã được đăng ký")
+        setMessage(intl.formatMessage({ id: "Login.Message7" }))
         setOpenNotification(true)
       }
     } else if (form == 2) {
       const error = await forgot(account)
       if (!loading && !error) {
-        setMessage("Gừi yêu cầu thành công, vui lòng kiểm tra email để tạo mới mật khẩu")
+        setMessage(intl.formatMessage({ id: "Login.Message8" }))
         setOpenSubmitNotification2(true)
       } else if (!loading && error) {
-        setMessage("Yêu cầu thất bại, tài khoản không tồn tại hoặc đã xày ra lỗi")
+        setMessage(intl.formatMessage({ id: "Login.Message9" }))
         setOpenNotification(true)
       }
     }
   }
 
   return (
-    <section className="flex h-dvh w-full relative justify-center place-items-center flex-col gap-4 no-scrollbar">
+    <section className="flex h-dvh w-full relative justify-center place-items-center flex-col gap-4 no-scrollbar overflow-clip">
 
       <RenderCase renderIf={openNotification}>
         <NotiPopup message={message} onClose={() => setOpenNotification(false)} />
       </RenderCase>
 
       <RenderCase renderIf={openSubmitNotification}>
-        <NotiPopup message={message} onClose={() => { setOpenSubmitNotification(false); router.push("/menu") }} />
+        <NotiPopup message={message} onClose={() => { setOpenSubmitNotification(false); router.push(`/menu?locale=${initialLocale}`) }} />
       </RenderCase>
 
       <RenderCase renderIf={openSubmitNotification2}>
@@ -145,25 +134,26 @@ export default function Home() {
         <button className="text-sm font-semibold text-blue-600 hover:text-brand-600 dark:text-white visible flex place-items-center w-1/3"
           onClick={() => { loading ? () => { } : (form == 0 ? setCurrentForm(1) : setCurrentForm(0)) }}>
           <RenderCase renderIf={form != 0}>
-            <>Đăng nhập</>
+            <FormattedMessage id="Login.Login" />
           </RenderCase>
 
           <RenderCase renderIf={form == 0}>
-            <>Đăng ký tài khoản</>
+            <FormattedMessage id="Login.SignUp" />
           </RenderCase>
         </button>
 
-        <div className="text-md font-semibold text-blue-600 dark:text-white flex place-items-center w-1/3 justify-center">
+        <div className="text-md font-semibold text-blue-600 dark:text-white flex place-items-center w-1/3 justify-center gap-1">
           {formattedTime ?? "00:00:00"}
         </div>
 
         <div className="flex place-items-center w-1/3 justify-end gap-2">
-          <div className="w-10 flex justify-center place-items-center relative">
+          <LanguageSwitcher />
+          <div className="w-10 flex justify-center place-items-center relative h-96">
             <Progress value={level && typeof level == "number" ? level * 100 : 40} color="blue" />
             <div className="absolute text-white"><BsFillLightningChargeFill /></div>
           </div>
-          <div className="text-blue-600 dark:text-white font-semibold">
-            {level && typeof level == "number" ? (level * 100).toFixed(2) : 40}%
+          <div className="text-blue-600 dark:text-white font-semibold hidden sm:block">
+            {level && typeof level == "number" ? (level * 100).toFixed(0) : 40}%
           </div>
         </div>
       </motion.div>
@@ -173,12 +163,12 @@ export default function Home() {
         initial="hidden"
         animate="visible"
         custom={1}
-        className={`w-11/12 md:w-2/3 lg:w-7/12 h-5/6 ${form == 1 ? "md:h-5/6" : "md:h-2/3"} transition-all duration-1000 z-[45] flex  gap-4 rounded-xl bg-white/50 p-2 backdrop-blur-xl dark:bg-[#0b14374d]`}
+        className={`w-11/12 md:w-2/3 lg:w-7/12 h-5/6 ${form == 1 ? "md:h-5/6" : "md:h-2/3"} transition-all duration-1000 z-[5] flex  gap-4 rounded-xl bg-white/50 p-2 backdrop-blur-xl dark:bg-[#0b14374d]`}
       >
         <div className="w-full h-full flex flex-col justify-between p-4 gap-4 overflow-y-auto no-scrollbar">
           <div className="flex flex-col gap-2 pr-32 lg:pr-40">
             <div className="flex gap-3">
-              <h4 className="text-4xl md:text-5xl font-bold text-navy-700 dark:text-white flex justify-between whitespace-nowrap">
+              <h4 className="text-4xl md:text-5xl font-bold text-blue-700 dark:text-white flex justify-between whitespace-nowrap">
                 <RenderCase renderIf={form == 0}><FormattedMessage id="Login.Login" /></RenderCase>
                 <RenderCase renderIf={form == 1}><FormattedMessage id="Login.Login3" /></RenderCase>
                 <RenderCase renderIf={form == 2}><FormattedMessage id="Login.Login5" /></RenderCase>
@@ -191,9 +181,9 @@ export default function Home() {
                 }}
               >
                 {theme === "dark" ? (
-                  <RiSunFill className="md:h-10 md:w-10 h-7 w-7 text-navy-700 dark:text-white" />
+                  <RiSunFill className="md:h-10 md:w-10 h-7 w-7 text-blue-700 dark:text-white" />
                 ) : (
-                  <RiMoonFill className="md:h-10 md:w-10 h-7 w-7 text-navy-700 dark:text-white" />
+                  <RiMoonFill className="md:h-10 md:w-10 h-7 w-7 text-blue-700 dark:text-white" />
                 )}
               </div>
             </div>
@@ -218,7 +208,7 @@ export default function Home() {
                 <div className="w-full flex flex-col justify-center h-full gap-4">
                   <InputField
                     variant={false}
-                    label="Tên tài khoản"
+                    label={intl.formatMessage({ id: "Login.Form1" })}
                     placeholder="example@gmail.com"
                     id="account"
                     type="text"
@@ -229,8 +219,8 @@ export default function Home() {
                   />
                   <InputField
                     variant={false}
-                    label="Mật khẩu"
-                    placeholder="Nhập mật khẩu"
+                    label={intl.formatMessage({ id: "Login.Form5" })}
+                    placeholder={intl.formatMessage({ id: "Login.Form3" })}
                     id="password"
                     type="password"
                     state={errorField && !password ? "error" : "none"}
@@ -245,12 +235,12 @@ export default function Home() {
                         htmlFor="remember-me"
                         className={`ml-2 text-sm font-medium ${rememberMe ? "text-blue-600 dark:text-white" : "text-black dark:text-white"}`}
                       >
-                        Lưu đăng nhập
+                        <FormattedMessage id="Login.Save" />
                       </label>
                     </div>
                     <button className="text-sm font-medium text-blue-600 hover:text-brand-600 dark:text-white visible"
                       onClick={loading ? () => { } : () => setCurrentForm(2)}>
-                      Quên mật khẩu?
+                      <FormattedMessage id="Login.Forgot" />
                     </button>
                   </div>
                 </div>
@@ -271,8 +261,8 @@ export default function Home() {
                 <div className="w-full flex flex-col justify-center h-full gap-4 pb-8">
                   <InputField
                     variant={false}
-                    label="Họ và tên"
-                    placeholder="Nguyễn Văn A"
+                    label={intl.formatMessage({ id: "Login.Form6" })}
+                    placeholder="Nguyen Van A"
                     id="name"
                     type="text"
                     value={name}
@@ -282,7 +272,7 @@ export default function Home() {
                   />
                   <InputField
                     variant={false}
-                    label="Tên tài khoản"
+                    label={intl.formatMessage({ id: "Login.Form1" })}
                     placeholder="example@gmail.com"
                     id="account"
                     type="text"
@@ -293,8 +283,8 @@ export default function Home() {
                   />
                   <InputField
                     variant={false}
-                    label="Mật khẩu"
-                    placeholder="Nhập mật khẩu"
+                    label={intl.formatMessage({ id: "Login.Form5" })}
+                    placeholder={intl.formatMessage({ id: "Login.Form3" })}
                     id="password"
                     type="password"
                     state={errorField && !password ? "error" : "none"}
@@ -304,8 +294,8 @@ export default function Home() {
                   />
                   <InputField
                     variant={false}
-                    label="Nhập lại mật khẩu"
-                    placeholder="Nhập lại mật khẩu"
+                    label={intl.formatMessage({ id: "Login.Form4" })}
+                    placeholder={intl.formatMessage({ id: "Login.Form4" })}
                     id="password2"
                     type="password"
                     state={errorField && (!password2 || password2 != password) ? "error" : "none"}
@@ -331,7 +321,7 @@ export default function Home() {
                 <div className="w-full flex flex-col justify-center h-full gap-4 pb-8">
                   <InputField
                     variant={false}
-                    label="Nhập email"
+                    label={intl.formatMessage({ id: "Login.Form2" })}
                     placeholder="example@gmail.com"
                     id="account"
                     type="text"
@@ -350,15 +340,15 @@ export default function Home() {
             className="linear w-full rounded-xl bg-brand-500 -mt-4 py-[12px] text-base font-medium text-white transition duration-200 hover:bg-brand-600 active:bg-brand-700 dark:text-white dark:hover:bg-brand-300 dark:active:bg-brand-200"
           >
             <RenderCase renderIf={form == 0 && !loading}>
-              <>Đăng nhập</>
+              <FormattedMessage id="Login.Login" />
             </RenderCase>
 
             <RenderCase renderIf={form == 1 && !loading}>
-              <>Đăng ký tài khoản</>
+              <FormattedMessage id="Login.SignUp" />
             </RenderCase>
 
             <RenderCase renderIf={form == 2 && !loading}>
-              <>Lấy lại tài khoản</>
+              <FormattedMessage id="Login.Forgot2" />
             </RenderCase>
 
             <RenderCase renderIf={loading}>
@@ -377,9 +367,9 @@ export default function Home() {
                 }}
               >
                 {theme === "dark" ? (
-                  <RiSunFill className="md:h-10 md:w-10 h-6 w-6 sm:text-navy-700 text-[#1488DB] dark:text-white" />
+                  <RiSunFill className="md:h-10 md:w-10 h-6 w-6 sm:text-blue-700 text-[#1488DB] dark:text-white" />
                 ) : (
-                  <RiMoonFill className="md:h-10 md:w-10 h-6 w-6 sm:text-navy-700 text-[#1488DB] dark:text-white" />
+                  <RiMoonFill className="md:h-10 md:w-10 h-6 w-6 sm:text-blue-700 text-[#1488DB] dark:text-white" />
                 )}
               </div>
             </div>

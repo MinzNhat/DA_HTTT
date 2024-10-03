@@ -1,28 +1,31 @@
-"use client";
+'use client'
+
 import "@/app/globals.css";
-import Navbar from "@/components/navbar";
-import { FC, Suspense, useEffect, useState } from "react";
-import CustomLoadingElement from "./loading";
-import useMobileView from "@/hooks/useMobileView";
-import Taskbar from "@/components/taskbar";
 import { motion } from "framer-motion";
-import { useOpenAppDataContext } from "@/providers/OpenAppProvider";
-import { useRouter, usePathname } from "next/navigation"; // Import usePathname
-import RenderCase from "@/components/rendercase";
+import Navbar from "@/components/navbar";
+import Taskbar from "@/components/taskbar";
+import CustomLoadingElement from "./loading";
 import AppLayout from "@/components/applayout";
-import LoadingUI from "@/components/loading";
+import RenderCase from "@/components/rendercase";
+import { useRouter, usePathname } from "next/navigation";
+import { FC, Suspense, useEffect, useState } from "react";
+import { useOpenAppDataContext } from "@/providers/OpenAppProvider";
 
 interface Props {
-    children: React.ReactNode
+    children: React.ReactNode;
 }
 
 const RootStructure: FC<Props> = ({ children }) => {
-    const { openApp, setOpenApp } = useOpenAppDataContext();
     const router = useRouter();
-    const pathname = usePathname(); // Sử dụng usePathname để lấy đường dẫn hiện tại
+    const pathname = usePathname();
     const [isVisible, setIsVisible] = useState(true);
+    const { openApp, setOpenApp } = useOpenAppDataContext();
     const [isTaskbarVisible, setIsTaskbarVisible] = useState(true);
-    const { isMobile } = useMobileView();
+
+    const handleCloseAppLayout = () => {
+        setOpenApp({ openApp: false, appName: "/menu" });
+        setIsVisible(true);
+    }
 
     const divVariants = {
         hidden: (direction: number) => ({
@@ -32,9 +35,15 @@ const RootStructure: FC<Props> = ({ children }) => {
         visible: {
             opacity: 1,
             y: 0,
-            transition: { duration: 0.8, ease: "easeInOut" }
-        }
+            transition: { duration: 0.8, ease: "easeInOut" },
+        },
     };
+
+    useEffect(() => {
+        if (openApp.appName) {
+            router.push(openApp.appName);
+        }
+    }, [openApp.appName]);
 
     useEffect(() => {
         if (pathname === "/menu") {
@@ -43,12 +52,6 @@ const RootStructure: FC<Props> = ({ children }) => {
             setOpenApp({ openApp: true, appName: pathname });
         }
     }, [pathname, setOpenApp]);
-
-    useEffect(() => {
-        if (openApp.appName) {
-            router.push(openApp.appName);
-        }
-    }, [openApp.appName]);
 
     useEffect(() => {
         let hideTimeout: NodeJS.Timeout;
@@ -76,43 +79,46 @@ const RootStructure: FC<Props> = ({ children }) => {
             }
         };
 
-        document.addEventListener('mousemove', handleMouseMove);
+        document.addEventListener("mousemove", handleMouseMove);
         return () => {
-            document.removeEventListener('mousemove', handleMouseMove);
+            document.removeEventListener("mousemove", handleMouseMove);
         };
     }, []);
 
     return (
-        <>
-            <section className="flex h-full w-full">
-                {/* Navbar & Main Content */}
-                <div className="h-full w-full bg-[url('/hcmut.jpg')] bg-cover bg-center min-h-dvh">
-                    {/* Main Content */}
-                    <main className={`max-h-dvh h-dvh flex flex-col justify-center transition-all no-scrollbar relative overflow-clip`}>
-                        <Navbar openApp={!(!openApp.openApp || !isVisible)} />
+        <section className="flex w-full max-h-dvh h-dvh overflow-clip">
+            <div className="w-full bg-[url('/hcmut.jpg')] bg-cover bg-center max-h-dvh h-dvh">
+                <main className="max-h-dvh h-dvh flex flex-col justify-center transition-all relative">
+                    <Navbar openApp={!(!openApp.openApp || !isVisible)} />
 
-                        {/* Routes */}
-                        <motion.div
-                            variants={divVariants}
-                            initial="hidden"
-                            animate="visible"
-                            custom={0}
-                            className={`h-full grid mx-2 w-[calc(100dvw-16px)] z-10 overflow-y-scroll no-scrollbar transition-all duration-200 rounded-md ${(!openApp.openApp || !isVisible) ? "bg-white/10 backdrop-blur-sm dark:bg-[#242526]/30" : ""}`}>
-                            <RenderCase renderIf={!openApp.openApp || pathname === "/menu"}>
+                    {/* Routes */}
+                    <motion.div
+                        variants={divVariants}
+                        initial="hidden"
+                        animate="visible"
+                        custom={0}
+                        className="flex mx-2 w-[calc(100dvw-16px)] h-full transition-colors duration-10000 ease-in-out bg-white/10 
+                            backdrop-blur-sm dark:bg-[#242526]/30 rounded-md relative overflow-y-auto no-scrollbar"
+                    >
+                        <RenderCase renderIf={pathname === "/menu"}>
+                            <Suspense fallback={<CustomLoadingElement />}>{children}</Suspense>
+                        </RenderCase>
+
+                        <RenderCase renderIf={openApp.openApp && pathname !== "/menu"}>
+                            <AppLayout
+                                isVisible={isVisible}
+                                setIsVisible={setIsVisible}
+                                onClose={handleCloseAppLayout}
+                            >
                                 <Suspense fallback={<CustomLoadingElement />}>{children}</Suspense>
-                            </RenderCase>
-                            <RenderCase renderIf={openApp.openApp && pathname !== "/menu"}>
-                                <AppLayout isVisible={isVisible} setIsVisible={setIsVisible} onClose={() => { setOpenApp({ openApp: false, appName: "/menu" }); setIsVisible(true); }}>
-                                    <Suspense fallback={<CustomLoadingElement />}>{children}</Suspense>
-                                </AppLayout>
-                            </RenderCase>
-                        </motion.div>
+                            </AppLayout>
+                        </RenderCase>
+                    </motion.div>
 
-                        <Taskbar openApp={!(!openApp.openApp || !isVisible)} isVisible={isTaskbarVisible} />
-                    </main>
-                </div>
-            </section>
-        </>
+                    <Taskbar openApp={!(!openApp.openApp || !isVisible)} isVisible={isTaskbarVisible} />
+                </main>
+            </div>
+        </section>
     );
 };
 

@@ -57,7 +57,7 @@ const DetailPopup: FC<Props> = ({ onClose, children, title, className, className
                     </div>
 
                     <button
-                        className="absolute right-0 w-8 h-8 top-0 rounded-full mb-2 hover:bg-gray-200 dark:hover:text-navy-900 flex justify-center place-items-center"
+                        className="absolute right-0 w-8 h-8 top-0 rounded-full mb-2 hover:bg-gray-200 dark:hover:text-blue-900 flex justify-center place-items-center"
                         onClick={handleClose}
                     >
                         <IoMdClose className="w-5/6 h-5/6 text-[#000000] dark:text-white dark:hover:text-[#242526]" />

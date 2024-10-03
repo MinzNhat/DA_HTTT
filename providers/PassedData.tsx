@@ -1,9 +1,16 @@
 'use client';
 import { createContext, ReactNode, useState, useContext, useEffect } from 'react';
 
-interface UserInfo {
-    role: string,
-    username: string,
+export interface UserInfo {
+    AddressLine1: string;
+    AddressLine2: string;
+    City: string;
+    CountryRegionName: string;
+    JobTitle: string;
+    PhoneNumber: string;
+    email: string;
+    isManager: boolean;
+    name: string;
 }
 
 export interface PassDataContextInterface {
@@ -19,8 +26,15 @@ type Props = {
 
 export default function PassDataProvider({ children }: Props) {
     const [passData, setPassData] = useState<UserInfo>({
-        role: "",
-        username: ""
+        AddressLine1: "",
+        AddressLine2: "",
+        City: "",
+        CountryRegionName: "",
+        JobTitle: "",
+        PhoneNumber: "",
+        email: "",
+        isManager: false,
+        name: "",
     });
 
     return (

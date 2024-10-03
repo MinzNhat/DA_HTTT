@@ -122,7 +122,7 @@ const ForgotPasswordPage: FC<Props> = ({ params }) => {
                 <div className="w-full h-full flex flex-col justify-between p-4 gap-4 overflow-y-auto no-scrollbar">
                     <div className="flex flex-col gap-2 pr-32 lg:pr-40">
                         <div className="flex gap-3">
-                            <h4 className="text-4xl md:text-5xl font-bold text-navy-700 dark:text-white flex justify-between whitespace-nowrap">
+                            <h4 className="text-4xl md:text-5xl font-bold text-blue-700 dark:text-white flex justify-between whitespace-nowrap">
                                 <FormattedMessage id="Login.Login7" />
                             </h4>
 
@@ -133,9 +133,9 @@ const ForgotPasswordPage: FC<Props> = ({ params }) => {
                                 }}
                             >
                                 {theme === "dark" ? (
-                                    <RiSunFill className="md:h-10 md:w-10 h-7 w-7 text-navy-700 dark:text-white" />
+                                    <RiSunFill className="md:h-10 md:w-10 h-7 w-7 text-blue-700 dark:text-white" />
                                 ) : (
-                                    <RiMoonFill className="md:h-10 md:w-10 h-7 w-7 text-navy-700 dark:text-white" />
+                                    <RiMoonFill className="md:h-10 md:w-10 h-7 w-7 text-blue-700 dark:text-white" />
                                 )}
                             </div>
                         </div>
@@ -197,9 +197,9 @@ const ForgotPasswordPage: FC<Props> = ({ params }) => {
                                 }}
                             >
                                 {theme === "dark" ? (
-                                    <RiSunFill className="md:h-10 md:w-10 h-6 w-6 sm:text-navy-700 text-[#1488DB] dark:text-white" />
+                                    <RiSunFill className="md:h-10 md:w-10 h-6 w-6 sm:text-blue-700 text-[#1488DB] dark:text-white" />
                                 ) : (
-                                    <RiMoonFill className="md:h-10 md:w-10 h-6 w-6 sm:text-navy-700 text-[#1488DB] dark:text-white" />
+                                    <RiMoonFill className="md:h-10 md:w-10 h-6 w-6 sm:text-blue-700 text-[#1488DB] dark:text-white" />
                                 )}
                             </div>
                         </div>

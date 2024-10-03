@@ -21,8 +21,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className='no-scrollbar'>
-      <body>
+    <html lang="en" className='max-h-dvh h-dvh'>
+      <body className='max-h-dvh h-dvh'>
         <LayoutStructure>
           {children}
         </LayoutStructure>

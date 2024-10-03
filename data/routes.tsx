@@ -1,12 +1,15 @@
-import { FaBox, FaShippingFast, FaUsers, FaCalendarAlt, FaTruck, FaMapMarkerAlt, FaHandshake, FaBuilding, FaBriefcase, FaPlusCircle, FaUserCircle } from "react-icons/fa";
-import { MdOutlineAddCircleOutline } from "react-icons/md";
-
+import { FaPlusCircle } from "react-icons/fa";
+import { MdOutlineSettingsSuggest } from "react-icons/md";
 const routes = [
   {
     name: "Trang chủ",
-    layout: "/dashboard",
     path: "menu",
     icon: <FaPlusCircle className="h-4 w-4" />,
+  },
+  {
+    name: "Cài đặt hệ thống",
+    path: "settings",
+    icon: <MdOutlineSettingsSuggest className="h-5 w-5" />,
   },
 ];
 

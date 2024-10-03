@@ -1,56 +1,77 @@
-'use client';
-import { useOpenAppDataContext } from "@/providers/OpenAppProvider";
-import { useRouter } from "next/navigation";
-import { FC } from "react";
-import { IconType } from "react-icons";
-import { FaMusic, FaCamera, FaFileAlt, FaCloud, FaGamepad, FaCogs, FaEnvelope, FaHeart, FaMap, FaShoppingCart, FaUser, FaGlobe } from "react-icons/fa";
-import { motion } from "framer-motion"; // Import framer-motion
+'use client'
 
-// Tạo dữ liệu mẫu cho các ứng dụng
-interface AppData {
-    id: number;
-    name: string;
-    icon: IconType;
-}
+import MusicApp from "./musicApp";
+import debounce from "lodash.debounce";
+import { motion } from "framer-motion";
+import { apps } from "../data/appList";
+import { useState, useEffect } from "react";
+import RenderCase from "@/components/rendercase";
+import { useSearchContext } from "@/providers/SearchProvider";
 
-const apps: AppData[] = [
-    { id: 1, name: "Music", icon: FaMusic },
-    { id: 2, name: "Camera", icon: FaCamera },
-    { id: 3, name: "Documents", icon: FaFileAlt },
-    { id: 4, name: "Cloud", icon: FaCloud },
-    { id: 5, name: "Games", icon: FaGamepad },
-    { id: 6, name: "Settings", icon: FaCogs },
-    { id: 7, name: "Email", icon: FaEnvelope },
-    { id: 8, name: "Health", icon: FaHeart },
-    { id: 9, name: "Maps", icon: FaMap },
-    { id: 10, name: "Shopping", icon: FaShoppingCart },
-    { id: 11, name: "Profile", icon: FaUser },
-    { id: 12, name: "Browser", icon: FaGlobe }
-];
+const MenuList = () => {
+    const { search } = useSearchContext();
+    const [debouncedSearch, setDebouncedSearch] = useState<string>("");
+    const [profileHeight, setProfileHeight] = useState<number | null>(null);
 
-const MenuList: FC = () => {
-    const router = useRouter();
-    const { setOpenApp } = useOpenAppDataContext();
+    const debounceSearch = debounce((value: string) => {
+        setDebouncedSearch(value);
+    }, 300);
+
+    useEffect(() => {
+        debounceSearch(search);
+    }, [search]);
+
+    useEffect(() => {
+        const profileElement = document.querySelector('.profile-element');
+
+        if (profileElement) {
+            const observer = new ResizeObserver(entries => {
+                for (let entry of entries) {
+                    if (entry.contentRect.height != 0) setProfileHeight(entry.contentRect.height);
+                }
+            });
+
+            observer.observe(profileElement);
+
+            return () => {
+                observer.disconnect();
+            };
+        }
+    }, []);
 
     return (
-        <div className="w-full h-fit grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 p-4">
-            {apps.map((app, index) => (
-                <motion.div
-                    key={app.id}
-                    className="flex flex-col gap-2"
-                    initial={{ opacity: 0, translateY: 50 }} // Bắt đầu từ dưới
-                    animate={{ opacity: 1, translateY: 0 }}  // Chuyển lên vị trí ban đầu
-                    transition={{ duration: 0.4, delay: index * 0.1 }} // Thời gian xuất hiện và delay theo index
-                >
-                    <div
-                        className="flex flex-col items-center justify-center w-full aspect-square backdrop-blur-xl bg-white/30 dark:bg-[#242526]/50 rounded-lg shadow-lg cursor-pointer"
-                        onClick={() => { setOpenApp({ openApp: true, appName: "testApp" }) }} // Thay đổi appName dựa trên tên app
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 p-4 w-full">
+            {apps
+                .filter(app => app.name.toLowerCase().includes(debouncedSearch.toLowerCase()))
+                .map((app, index) => (
+                    <motion.div
+                        key={app.id}
+                        className={`flex flex-col gap-2 !h-full !w-full justify-center place-items-center ${app.className}`}
+                        initial={{ opacity: 0, translateY: 50 }}
+                        animate={{ opacity: 1, translateY: 0 }}
+                        transition={{ duration: 0.4, delay: index * 0.1 }}
                     >
-                        <app.icon className="text-4xl lg:text-6xl mb-2 dark:text-white text-navy-700 h-full pt-10" />
-                        <span className="text-md font-semibold mb-2 dark:text-white text-navy-700 justify-self-end h-10">{app.name}</span>
-                    </div>
-                </motion.div>
-            ))}
+                        <div
+                            className={`${app.className} ${app.name === "Camera" ? 'profile-element' : ''} flex flex-col items-center justify-center w-full 
+                            backdrop-blur-xl bg-white/70 lg:bg-white/80 dark:bg-[#242526]/50 rounded-lg shadow-lg cursor-pointer`}
+                            style={{
+                                ...(app.name === "Documents" && profileHeight ? { height: profileHeight } : {}),
+                                ...(app.name === "Music" ? { height: '100%', maxHeight: profileHeight ? `${profileHeight * 2 + 24}px` : 'none' } : {}),
+                            }}
+                        >
+                            <RenderCase renderIf={app.name === "Music"}>
+                                <MusicApp />
+                            </RenderCase>
+
+                            <RenderCase renderIf={app.name !== "Music"}>
+                                <>
+                                    <app.icon className="text-4xl lg:text-6xl mb-2 dark:text-white text-blue-700 h-full pt-10 min-h-6 min-w-6" />
+                                    <span className="text-md font-semibold mb-2 dark:text-white text-blue-700 justify-self-end h-10">{app.name}</span>
+                                </>
+                            </RenderCase>
+                        </div>
+                    </motion.div>
+                ))}
         </div>
     );
 };

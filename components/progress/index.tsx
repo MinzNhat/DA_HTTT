@@ -4,14 +4,16 @@ type Props = {
   value?: string | number
   color?: string
   width?: string
+  height?: string
   bgColor?: string
 }
 
-const Progress: FC<Props> = ({ value, color, width, bgColor }) => {
+const Progress: FC<Props> = ({ value, color, width, bgColor, height }) => {
   return (
     <div
-      className={`h-3 ${width ? width : "w-full"
-        } rounded-full ${bgColor ? bgColor : "bg-gray-200 dark:bg-navy-700"
+      className={`${height ? height : "h-3"
+        } ${width ? width : "w-full"
+        } rounded-full ${bgColor ? bgColor : "bg-gray-200 dark:bg-blue-700"
         }`}
     >
       <div
@@ -27,8 +29,8 @@ const Progress: FC<Props> = ({ value, color, width, bgColor }) => {
                   ? "bg-orange-500 dark:bg-orange-400"
                   : color === "teal"
                     ? "bg-teal-500 dark:bg-teal-400"
-                    : color === "navy"
-                      ? "bg-navy-700 dark:bg-blue-400"
+                    : color === "blue"
+                      ? "bg-blue-700 dark:bg-blue-400"
                       : color === "lime"
                         ? "bg-lime-500 dark:bg-lime-400"
                         : color === "cyan"
