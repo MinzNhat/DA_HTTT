@@ -7,7 +7,7 @@ import Taskbar from "@/components/taskbar";
 import CustomLoadingElement from "./loading";
 import AppLayout from "@/components/applayout";
 import RenderCase from "@/components/rendercase";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { FC, Suspense, useEffect, useState } from "react";
 import { useOpenAppDataContext } from "@/providers/OpenAppProvider";
 
@@ -18,6 +18,8 @@ interface Props {
 const RootStructure: FC<Props> = ({ children }) => {
     const router = useRouter();
     const pathname = usePathname();
+    const searchParams = useSearchParams();
+    const initialLocale = searchParams.get('locale') || 'vi';
     const [isVisible, setIsVisible] = useState(true);
     const { openApp, setOpenApp } = useOpenAppDataContext();
     const [isTaskbarVisible, setIsTaskbarVisible] = useState(true);
@@ -41,7 +43,7 @@ const RootStructure: FC<Props> = ({ children }) => {
 
     useEffect(() => {
         if (openApp.appName) {
-            router.push(openApp.appName);
+            router.push(`${openApp.appName}?locale=${initialLocale}`);
         }
     }, [openApp.appName]);
 
