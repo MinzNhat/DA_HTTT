@@ -241,8 +241,7 @@ const ProductsMain = () => {
         {
             id: 1,
             component:
-                <div className='flex flex-col gap-4 w-full h-full md:w-1/2 py-4'>
-
+                <div className='flex flex-col gap-4 w-full h-full md:w-1/2 p-4'>
                     {openProductDetail ?
                         <ProductFields data={productDetail} handleChange={handleChange} fields={productFields} />
                         :
@@ -264,7 +263,7 @@ const ProductsMain = () => {
             <div className="sticky top-0 w-full flex gap-2 z-10 bg-white dark:bg-[#242526] h-12 min-h-12 px-2 justify-center place-items-center">
                 <div className='gap-1 px-1 flex'>
                     <FaAngleLeft className={`w-5 h-5 ${page == 0 ? 'text-gray-500 dark:text-darkContainerPrimary' : ''}`} onClick={() => { paginate(0) }} />
-                    <FaAngleRight className={`w-5 h-5 ${page == 1 ? 'text-gray-500 dark:text-gray-700' : ''}`} onClick={() => { paginate(1) }} />
+                    <FaAngleRight className={`w-5 h-5 ${page == 1 ? 'text-gray-500 dark:text-darkContainerPrimary' : ''}`} onClick={() => { paginate(1) }} />
                 </div>
 
                 <div className='dark:bg-[#3A3B3C] bg-lightPrimary rounded-full flex w-full h-9 overflow-clip relative'>
