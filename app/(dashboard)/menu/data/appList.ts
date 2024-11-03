@@ -10,10 +10,9 @@ interface AppData {
 
 export const apps: AppData[] = [
     { id: 1, name: "Music", icon: FaMusic, className: "lg:row-span-2 col-span-2 sm:col-span-3 md:col-span-4 lg:col-span-2 aspect-auto" },
-    { id: 3, name: "Documents", icon: FaFileAlt, className: "col-span-2 sm:hidden" },
-    { id: 2, name: "Camera", icon: FaCamera, className: "aspect-square" },
-    { id: 3, name: "Documents", icon: FaFileAlt, className: "col-span-2 hidden sm:flex" },
     { id: 4, name: "Cloud", icon: FaCloud, className: "aspect-square" },
+    { id: 2, name: "Camera", icon: FaCamera, className: "aspect-square" },
+    { id: 3, name: "Documents", icon: FaFileAlt, className: "col-span-2 sm:col-span-1 md:col-span-2" },
     { id: 5, name: "Games", icon: FaGamepad, className: "aspect-square" },
     { id: 7, name: "Email", icon: FaEnvelope, className: "aspect-square" },
     { id: 8, name: "Health", icon: FaHeart, className: "aspect-square" },

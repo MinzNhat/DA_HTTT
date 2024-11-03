@@ -73,7 +73,7 @@ export class ProductOperation {
       );
 
       return response.status === 200
-        ? { error: false, data: response.data as ProductInfo }
+        ? { error: false, data: response.data as ProductInfo[] }
         : { error: true, data: null };
     } catch (err: any) {
       return { error: true, data: null };
@@ -95,6 +95,7 @@ export class ProductOperation {
           },
         }
       );
+      console.log(response)
 
       return response.status === 202
         ? { error: false, data: response.data as ProductInfo }

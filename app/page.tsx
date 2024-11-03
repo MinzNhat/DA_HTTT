@@ -148,7 +148,7 @@ export default function Home() {
 
         <div className="flex place-items-center w-1/3 justify-end gap-2">
           <LanguageSwitcher />
-          <div className="w-10 flex justify-center place-items-center relative h-96">
+          <div className="w-10 flex justify-center place-items-center relative">
             <Progress value={level && typeof level == "number" ? level * 100 : 40} color="blue" />
             <div className="absolute text-white"><BsFillLightningChargeFill /></div>
           </div>

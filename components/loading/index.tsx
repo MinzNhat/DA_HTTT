@@ -1,5 +1,3 @@
-
-
 const LoadingUI = () => {
 
     return (

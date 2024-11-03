@@ -107,16 +107,14 @@ const Navbar: FC<Props> = ({ openApp }) => {
       <div className={` h-7 ${openApp ? "bg-white dark:bg-[#242526] shadow-[4px_-4px_10px_rgba(0,0,0,0.3)]" : "backdrop-blur-xl bg-white/80 dark:bg-[#242526]/50"} flex gap-4 justify-between transition-all duration-200 px-2 py-1 rounded-md`}>
         <div className='w-1/3'>
           <Dropdown
-            animation="origin-top-left transition-all duration-300 ease-in-out"
             button={
               <div className={`text-sm font-semibold text-blue-700 hover:text-brand-600 dark:text-white visible flex place-items-center`}
                 onClick={() => { }}>
                 <Image src="/logo.ico" alt="Your image" width={20} height={20} />
               </div>
             }
-            className={"py-2 top-8 left-0 "}
           >
-            <div className="flex w-fit !z-50 flex-col justify-start border dark:border-white/10 rounded-md bg-white bg-cover bg-no-repeat shadow-xl shadow-shadow-500 dark:!bg-[#242526] dark:text-white dark:shadow-none">
+            <div className="absolute -left-2 flex w-44 !z-50 flex-col justify-start border dark:border-white/10 rounded-md bg-white bg-cover bg-no-repeat shadow-xl shadow-shadow-500 dark:!bg-[#242526] dark:text-white dark:shadow-none">
               <div className="flex flex-col py-1 px-2">
                 <button
                   className="text-sm font-medium text-blue-700 dark:text-white text-left gap-2 flex place-items-center"
@@ -136,7 +134,7 @@ const Navbar: FC<Props> = ({ openApp }) => {
                   </div>
                 </button>
               </div>
-              <div className="h-px w-full bg-gray-200 dark:bg-white/10 " />
+              <div className="h-[0.5px] w-full bg-gray-200 dark:bg-white/10 " />
               <div className="flex flex-col py-1 px-2">
                 <button
                   className="text-sm font-medium text-blue-700 dark:text-white text-left"
@@ -144,7 +142,7 @@ const Navbar: FC<Props> = ({ openApp }) => {
                   Tình trạng pin: {charging == true ? "Đang sạc" : charging == false ? "Không cắm sạc" : "Không hỗ trỡ"}
                 </button>
               </div>
-              <div className="h-px w-full bg-gray-200 dark:bg-white/10 " />
+              <div className="h-[0.5px] w-full bg-gray-200 dark:bg-white/10 " />
 
               <div className="py-1 px-2 flex flex-col">
                 <button
@@ -168,7 +166,7 @@ const Navbar: FC<Props> = ({ openApp }) => {
           {formattedTime ?? "00:00:00"}
         </div>
 
-        <div className={`flex place-items-center  justify-end gap-2 w-1/3`}>
+        <div className={`flex place-items-center justify-end gap-2 w-1/3`}>
           <LanguageSwitcher />
           <div
             className="cursor-pointer text-gray-600"
@@ -182,12 +180,15 @@ const Navbar: FC<Props> = ({ openApp }) => {
               <RiMoonFill className="w-4 h-4 text-blue-700 dark:text-white" />
             )}
           </div>
-          <div className="text-blue-700 dark:text-white font-semibold text-xs">
+          <div className="text-blue-700 dark:text-white font-semibold text-xs hidden sm:block">
             {level && typeof level == "number" ? level * 100 : 40}%
           </div>
-          <div className="w-6 sm:w-10 flex justify-center place-items-center relative">
+          <div className="w-8 sm:w-10 flex justify-center place-items-center relative">
             <Progress value={level && typeof level == "number" ? (level * 100).toFixed(2) : 40} color="blue" />
-            <div className="absolute text-white"><BsFillLightningChargeFill /></div>
+            <div className="absolute text-white hidden sm:block"><BsFillLightningChargeFill /></div>
+            <div className="absolute text-blue-700 dark:text-white font-semibold text-xs sm:hidden">
+              {level && typeof level == "number" ? level * 100 : 40}
+            </div>
           </div>
           <div className="text-sm font-semibold text-blue-700 dark:text-white hidden sm:block">
             {formattedTime ?? "00:00:00"}

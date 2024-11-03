@@ -40,7 +40,7 @@ const MenuList = () => {
     }, []);
 
     return (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 p-4 w-full">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 w-full">
             {apps
                 .filter(app => app.name.toLowerCase().includes(debouncedSearch.toLowerCase()))
                 .map((app, index) => (
@@ -53,7 +53,7 @@ const MenuList = () => {
                     >
                         <div
                             className={`${app.className} ${app.name === "Camera" ? 'profile-element' : ''} flex flex-col items-center justify-center w-full 
-                            backdrop-blur-xl bg-white/70 lg:bg-white/80 dark:bg-[#242526]/50 rounded-lg shadow-lg cursor-pointer`}
+                            backdrop-blur-xl bg-white/70 lg:bg-white/80 dark:bg-[#242526]/70 rounded-lg shadow-lg cursor-pointer`}
                             style={{
                                 ...(app.name === "Documents" && profileHeight ? { height: profileHeight } : {}),
                                 ...(app.name === "Music" ? { height: '100%', maxHeight: profileHeight ? `${profileHeight * 2 + 24}px` : 'none' } : {}),

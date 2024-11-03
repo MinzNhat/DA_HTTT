@@ -1,4 +1,5 @@
 {
+    "LoadingMessage": "Loading...",
     "Navbar.Logout": "Logout",
     "routes.Loading...": "Loading...",
     "Notification.Title": "Notification",

@@ -1,4 +1,5 @@
 {
+    "LoadingMessage": "Đang tải...",
     "Navbar.Logout": "Đăng xuất",
     "routes.Loading...": "Đang tải...",
     "Notification.Title": "Thông báo",
@@ -33,6 +34,7 @@
     "Login.Message9": "Yêu cầu thất bại, tài khoản không tồn tại hoặc đã xày ra lỗi",
     "routes.menu": "Trang chủ",
     "routes.settings": "Cài đặt hệ thống",
+    "routes.products": "Sản phẩm",
     "Settings.Fullname": "Họ và tên",
     "Settings.PhoneNumber": "Số điện thoại",
     "Settings.Email": "Email",
@@ -43,5 +45,15 @@
     "Settings.JobTitle": "Mô tả nghề nghiệp",
     "Settings.isManager": "Vai trò",
     "Settings.Manager": "Quản lý",
-    "Settings.Employee": "Nhân viên"
+    "Settings.Employee": "Nhân viên",
+    "Product.Name": "Tên sản phẩm",
+    "Product.Manufacturer": "Nhà sản xuất",
+    "Product.Summary": "Tóm tắt",
+    "Product.WarrantyPeriod": "Thời gian bảo hành",
+    "Product.RiderExperience": "Trải nghiệm thử",
+    "Product.Description": "Mô tả",
+    "Product.Size": "Kích thước",
+    "Product.Style": "Phong cách",
+    "Product.StandardCost": "Giá bán",
+    "Product.ListPrice": "Giá sản xuất"
 }
