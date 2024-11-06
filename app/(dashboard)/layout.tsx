@@ -69,28 +69,10 @@ const RootStructure: FC<Props> = ({ children }) => {
         return () => clearTimeout(hideTimeout);
     }, [openApp.openApp]);
 
-    useEffect(() => {
-        const handleMouseMove = (event: MouseEvent) => {
-            const windowHeight = window.innerHeight;
-            const mouseY = event.clientY;
-
-            if (mouseY >= windowHeight - 100) {
-                setIsTaskbarVisible(true);
-            } else {
-                setIsTaskbarVisible(false);
-            }
-        };
-
-        document.addEventListener("mousemove", handleMouseMove);
-        return () => {
-            document.removeEventListener("mousemove", handleMouseMove);
-        };
-    }, []);
-
     return (
         <section className="flex w-full max-h-dvh h-dvh overflow-clip">
             <div className="w-full bg-[url('/hcmut.jpg')] bg-cover bg-center max-h-dvh h-dvh">
-                <main className="max-h-dvh h-dvh flex flex-col justify-center transition-all relative">
+                <main className={`max-h-dvh h-dvh flex flex-col justify-center transition-all relative duration-500 backdrop-blur-lg bg-black/50 dark:bg-black/40`}>
                     <Navbar openApp={!(!openApp.openApp || !isVisible)} />
 
                     {/* Routes */}
@@ -99,8 +81,7 @@ const RootStructure: FC<Props> = ({ children }) => {
                         initial="hidden"
                         animate="visible"
                         custom={0}
-                        className="flex mx-2 w-[calc(100dvw-16px)] h-full transition-colors duration-10000 ease-in-out bg-white/10 
-                            backdrop-blur-sm dark:bg-[#242526]/30 rounded-md relative overflow-y-auto no-scrollbar"
+                        className={`flex mx-2 w-[calc(100dvw-16px)] h-full transition-colors duration-500 ease-in-out rounded-md relative overflow-y-auto no-scrollbar`}
                     >
                         <RenderCase renderIf={pathname === "/menu"}>
                             <Suspense fallback={<CustomLoadingElement />}>{children}</Suspense>

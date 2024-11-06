@@ -1,11 +1,11 @@
 'use client'
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { useCallback, useEffect, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Button } from '@nextui-org/react';
 import { IoShareOutline } from "react-icons/io5";
 import { usePassDataContext, UserInfo } from '@/providers/PassedData';
 import { IoIosAdd, IoIosBrowsers } from 'react-icons/io';
-import { FaAngleLeft, FaAngleRight, FaUser } from 'react-icons/fa';
+import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 import RenderCase from '@/components/rendercase';
 import SettingAccount from './SettingAccount';
 import { useIntl } from 'react-intl';
@@ -13,17 +13,18 @@ import { useThemeContext } from '@/providers/ThemeProvider';
 import NotiPopup from '@/components/notification';
 import SubmitPopup from '@/components/submit';
 import { UpdateUserInfo, UserOperation } from '@/api_lib/User';
+import SettingTheme from './SettingTheme';
 
 const SettingsMain = () => {
     const intl = useIntl()
     const { theme } = useThemeContext()
-    const [option, setOption] = useState<number>(0);
+    const [[page, direction], setPage] = useState([0, 0]);
     const [message, setMessage] = useState<string>("");
     const { passData, setPassData } = usePassDataContext();
     const [openNotification, setOpenNotification] = useState<boolean>(false);
     const [openSubmitNotification, setOpenSubmitNotification] = useState<boolean>(false);
     const phoneNumberRegex = /^[0-9]{10,11}$/;
-    const userOperation = new UserOperation()
+    const userOperation = new UserOperation();
     const [data, setData] = useState<UserInfo>({
         AddressLine1: "",
         AddressLine2: "",
@@ -40,6 +41,35 @@ const SettingsMain = () => {
         hidden: { opacity: 0, scale: 0.9 },
         visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } },
         exit: { opacity: 0, scale: 0.9, transition: { duration: 0.5 } },
+    };
+
+    const variants = {
+        enter: (direction: number) => {
+            return {
+                x: direction > 0 ? "100%" : "-100%",
+                opacity: 0
+            };
+        },
+        center: {
+            zIndex: 1,
+            x: 0,
+            opacity: 1
+        },
+        exit: (direction: number) => {
+            return {
+                zIndex: 0,
+                x: direction < 0 ? "100%" : "-100%",
+                opacity: 0
+            };
+        }
+    };
+
+    const paginate = useCallback((targetPage: number) => {
+        setPage([targetPage, targetPage - page]);
+    }, [page]);
+
+    const swipePower = (offset: number, velocity: number) => {
+        return Math.abs(offset) * velocity;
     };
 
     const handleChange = (id: keyof UserInfo, value: string | number) => {
@@ -77,11 +107,6 @@ const SettingsMain = () => {
         }
 
         const token = localStorage?.getItem('accessToken');
-        if (!token) {
-            setMessage("Vui lòng đăng nhập để tiếp tục")
-            setOpenNotification(true)
-            return
-        }
 
         const response = await userOperation.updateUserInfo({ token: token }, updateData)
 
@@ -108,6 +133,14 @@ const SettingsMain = () => {
         { id: "isManager", type: "text", label: "Settings.isManager", disable: true, important: true },
     ];
 
+    const options = [
+        { id: 0, component: <div className='flex flex-col gap-4 w-full h-full md:w-1/2'><SettingAccount theme={theme} data={data} fields={fields} handleChange={handleChange} setData={setData} intl={intl} /></div> },
+        { id: 1, component: <div className='flex flex-col gap-4 w-full h-full'><SettingTheme /></div> },
+        { id: 2, component: <div className='w-full h-full' /> },
+    ];
+
+    const swipeConfidenceThreshold = 2;
+
     useEffect(() => {
         if (passData) {
             setData(passData)
@@ -115,7 +148,7 @@ const SettingsMain = () => {
     }, [passData]);
 
     return (
-        <div className="flex justify-between place-items-center dark:text-white relative flex-col h-full">
+        <div className="flex place-items-center dark:text-white relative flex-col h-full">
             <RenderCase renderIf={openNotification}>
                 <NotiPopup message={message} onClose={() => setOpenNotification(false)} />
             </RenderCase>
@@ -130,29 +163,25 @@ const SettingsMain = () => {
                 </div>
 
                 <div className='dark:bg-[#3A3B3C] bg-lightPrimary rounded-md sm:rounded-full flex w-full overflow-clip relative'>
-                    <Button className={`w-full flex flex-row h-9 ${option === 0 ? "text-blue-500 font-semibold " : "text-black font-sans"}`} onClick={() => setOption(0)}>
+                    <Button className={`w-full flex flex-row h-9 bg-lightPrimary dark:bg-darkContainerPrimary rounded-none ${page === 0 ? "text-blue-500 font-semibold " : "text-black dark:text-white font-sans"}`} onClick={() => paginate(0)}>
                         <span className="text-sm sm:md">Tài khoản</span>
                     </Button>
-                    <Button className={`w-full flex flex-row h-9 ${option === 1 ? "text-blue-500 font-semibold " : "text-black font-sans"}`} onClick={() => setOption(1)}>
+                    <Button className={`w-full flex flex-row h-9 bg-lightPrimary dark:bg-darkContainerPrimary rounded-none ${page === 1 ? "text-blue-500 font-semibold " : "text-black dark:text-white font-sans"}`} onClick={() => paginate(1)}>
                         <span className="text-sm sm:md">Nền hệ thống</span>
                     </Button>
-                    <Button className={`w-full flex flex-row h-9 ${option === 2 ? "text-blue-500 font-semibold " : "text-black font-sans"}`} onClick={() => setOption(2)}>
+                    <Button className={`w-full flex flex-row h-9 bg-lightPrimary dark:bg-darkContainerPrimary rounded-none ${page === 2 ? "text-blue-500 font-semibold " : "text-black dark:text-white font-sans"}`} onClick={() => paginate(2)}>
                         <span className="text-sm sm:md">Ngôn ngữ</span>
                     </Button>
                     <motion.div
                         className={`w-1/3 bg-blue-500 -bottom-[1px] h-[2px] absolute`}
-                        initial={{ width: 0 }}
-                        animate={{ width: "33.33%" }}
-                        exit={{ width: 0 }}
                         transition={{ duration: 0.3 }}
                         variants={{
                             left: { width: "33.33%", left: 0, right: "auto" },
                             center: { width: "33.33%", left: "33.33%", right: "auto" },
                             right: { width: "33.33%", left: "66.66%", right: "auto" },
                         }}
-                        //@ts-ignore
                         initial="left"
-                        animate={option === 0 ? "left" : option === 1 ? "center" : "right"}
+                        animate={page === 0 ? "left" : page === 1 ? "center" : "right"}
                         exit="left"
                     />
                 </div>
@@ -164,46 +193,42 @@ const SettingsMain = () => {
                 </div>
             </div>
 
-            <div className="w-full relative overflow-y-auto no-scrollbar flex flex-col gap-4">
-                <RenderCase renderIf={option === 0}>
-                    <motion.div
-                        variants={containerVariants}
-                        initial="hidden"
-                        animate="visible"
-                        exit="exit"
-                        className='flex justify-center w-full mt-6'
-                    >
-                        <RenderCase renderIf={theme === "dark"}>
-                            <img
-                                src='/avatar.jpg'
-                                alt="avatar"
-                                width={19200}
-                                height={10800}
-                                className="h-40 w-40 object-cover rounded-full"
-                            />
-                        </RenderCase>
-                        <RenderCase renderIf={theme === "light"}>
-                            <div className="h-40 w-40 rounded-full bg-white flex justify-center place-items-center" >
-                                <FaUser className="text-blue-700 h-20 w-20" />
-                            </div>
-                        </RenderCase>
-                    </motion.div>
-                </RenderCase>
+            <div className="w-full relative overflow-y-auto no-scrollbar flex flex-col gap-4 h-full">
+                <AnimatePresence initial={false} custom={direction} mode='popLayout'>
+                    {options.map(indexoption => (
+                        indexoption.id === page && (
+                            <motion.div
+                                key={page}
+                                custom={direction}
+                                variants={variants}
+                                initial="enter"
+                                animate="center"
+                                exit="exit"
+                                transition={{
+                                    opacity: { duration: 0.3 }
+                                }}
+                                drag="x"
+                                dragConstraints={{ left: 0, right: 0 }}
+                                dragElastic={1}
+                                onDragEnd={(_e, { offset, velocity }) => {
+                                    const swipe = swipePower(offset.x, velocity.x);
 
-                <RenderCase renderIf={option === 0}>
-                    <motion.div
-                        variants={containerVariants}
-                        initial="hidden"
-                        animate="visible"
-                        exit="exit"
-                        className='p-4 flex flex-col gap-4 w-full'
-                    >
-                        <SettingAccount data={data} fields={fields} handleChange={handleChange} setData={setData} intl={intl} />
-                    </motion.div>
-                </RenderCase>
+                                    if (swipe < -swipeConfidenceThreshold) {
+                                        paginate(Math.min(page + 1, options.length - 1));
+                                    } else if (swipe > swipeConfidenceThreshold) {
+                                        paginate(Math.max(page - 1, 0));
+                                    }
+                                }}
+                                className="inset-0 p-4 w-full h-full overflow-y-auto no-scrollbar flex justify-center mb-2"
+                            >
+                                {indexoption.component}
+                            </motion.div>
+                        )
+                    ))}
+                </AnimatePresence>
             </div>
 
-            <RenderCase renderIf={option === 0}>
+            <RenderCase renderIf={page === 0}>
                 <motion.div
                     variants={containerVariants}
                     initial="hidden"
@@ -213,7 +238,7 @@ const SettingsMain = () => {
                 >
                     <button
                         onClick={submit}
-                        className="linear w-full rounded-xl bg-brand-500 py-[12px] text-base font-medium text-white transition duration-200 hover:bg-brand-600 active:bg-brand-700 dark:text-white dark:hover:bg-brand-300 dark:active:bg-brand-200"
+                        className="linear w-full !rounded-md bg-brand-500 py-[10px] text-base font-medium text-white transition duration-200 hover:bg-brand-600 active:bg-brand-700 dark:text-white dark:hover:bg-brand-300 dark:active:bg-brand-200"
                     >
                         Cập nhật
                     </button>

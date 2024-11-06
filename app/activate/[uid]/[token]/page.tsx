@@ -42,7 +42,7 @@ const ActivatePage: FC<Props> = ({ params }) => {
             }, 1000);
 
             const timeout = setTimeout(() => {
-                router.push('/');
+                // router.push('/');
             }, 5000);
 
             return () => {

@@ -57,7 +57,7 @@ const AppLayout: FC<Props> = ({ onClose, isVisible, setIsVisible, children }) =>
     >
         <motion.div
             ref={notificationRef}
-            className={`w-full h-full rounded-md flex flex-col shadow-[1px_-1px_10px_rgba(0,0,0,0.1)] bg-lightPrimary dark:dark:bg-[#242526]/95`}
+            className={`w-full h-full rounded-md flex flex-col shadow-[1px_-1px_10px_rgba(0,0,0,0.1)] bg-white dark:bg-[#242526]`}
             initial={{ scale: 0 }}
             animate={{ scale: isVisible ? 1 : 0 }}
             exit={{ scale: 0 }}

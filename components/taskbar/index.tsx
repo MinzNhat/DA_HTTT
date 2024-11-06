@@ -10,7 +10,6 @@ import RenderCase from "../rendercase";
 import { Button } from "@nextui-org/react";
 import TooltipHorizon from "../tooltip";
 import { useThemeContext } from "@/providers/ThemeProvider";
-import { BsGithub } from "react-icons/bs";
 import { FaUser } from "react-icons/fa";
 
 interface Props {
@@ -90,7 +89,6 @@ const Taskbar: FC<Props> = ({ openApp, isVisible }) => {
                                     placeholder:!text-blue-700 dark:bg-[#3a3b3c] dark:text-white dark:placeholder:!text-white transition-all duration-500 ${isSearchFocused ? "pl-4" : "pl-10"
                                         }`}
                                     style={{
-
                                         borderTopRightRadius: "9999px",
                                         borderBottomRightRadius: isSearchFocused ? "9999px" : "0px",
                                     }}
