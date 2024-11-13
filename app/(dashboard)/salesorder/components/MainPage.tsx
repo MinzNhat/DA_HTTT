@@ -8,12 +8,12 @@ import RenderCase from "@/components/rendercase";
 import NotiPopup from "@/components/notification";
 import SubmitPopup from "@/components/submit";
 import {
-  CreateProductInfo,
-  ProductInfo,
-  ProductOperation,
-} from "@/api_lib/Product";
+  CreateSalesOrderInfo,
+  SalesOrderInfo,
+  SalesOrderOperation,
+} from "@/api_lib/SalesOrder";
 import ProductTable from "./Table";
-import ProductFields from "./ProductFields";
+import SalesOrderFields from "./SalesOrderFields";
 import { useIntl } from "react-intl";
 import LoadingUI from "@/components/loading";
 
@@ -46,66 +46,73 @@ const containerVariants = {
 
 const ProductsMain = () => {
   const intl = useIntl();
-  const ProductOp = new ProductOperation();
+  const SalesOrderOp = new SalesOrderOperation();
   const [[page, direction], setPage] = useState([0, 0]);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [selectedRows, setSelectedRows] = useState<ProductInfo[]>([]);
+  const [selectedRows, setSelectedRows] = useState<SalesOrderInfo[]>([]);
   const [message, setMessage] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [productDetail, setProductDetail] = useState<ProductInfo>({
+  const [salesOrderDetail, setSalesOrderDetail] = useState<SalesOrderInfo>({
     id: 0,
-    Name: "",
-    Manufacturer: "",
-    Summary: "",
-    WarrantyPeriod: "",
-    RiderExperience: "",
-    Description: "",
-    Size: "",
-    Style: "",
-    StandardCost: "",
-    ListPrice: "",
+    SalesOrderDetail: [],
+    OrderDate: "",
+    DueDate: "",
+    ShipDate: "",
+    ShipMethod: "",
+    Comment: "",
+    SubTotal: "",
+    TaxAmt: "",
+    Freight: "",
+    TotalDue: "",
+    Employee: 0,
+    Customer: 0,
+    Territory: 0,
   });
   const [openNotification, setOpenNotification] = useState<boolean>(false);
-  const [openProductDetail, setOpenProductDetail] = useState<boolean>(false);
+  const [openSalesOrderDetail, setOpenSalesOrderDetail] =
+    useState<boolean>(false);
   const [openSubmitDelete, setOpenSubmitDelete] = useState<boolean>(false);
-  const [productData, setProductData] = useState<CreateProductInfo>({
-    Name: "",
-    Manufacturer: "",
-    Summary: "",
-    WarrantyPeriod: "",
-    RiderExperience: "",
-    Description: "",
-    Size: "",
-    Style: "",
-    StandardCost: "",
-    ListPrice: "",
+  const [salesOrderData, setSalesOrderData] = useState<CreateSalesOrderInfo>({
+    SalesOrderDetail: [],
+    OrderDate: "",
+    DueDate: "",
+    ShipDate: "",
+    ShipMethod: "",
+    Comment: "",
+    SubTotal: "",
+    TaxAmt: "",
+    Freight: "",
+    TotalDue: "",
+    Employee: 0,
+    Customer: 0,
+    Territory: 0,
   });
-  const [data, setData] = useState<ProductInfo[] | null>(null);
+  const [data, setData] = useState<SalesOrderInfo[] | null>(null);
 
   const reloadData = useCallback(async () => {
     setData(null);
     const token = localStorage?.getItem("accessToken");
-    const response = await ProductOp.getSpecialOffer({ token });
+    const response = await SalesOrderOp.getSpecialOffer({ token });
     if (response.data) setData(response.data);
   }, []);
 
   const openAdd = () => {
-    setOpenProductDetail(false);
+    setOpenSalesOrderDetail(false);
     paginate(1);
   };
 
-  const openDetail = (data: ProductInfo) => {
-    setProductDetail(data);
-    setOpenProductDetail(true);
+  const openDetail = (data: SalesOrderInfo) => {
+    setSalesOrderDetail(data);
+    setOpenSalesOrderDetail(true);
     paginate(1);
   };
 
   const handleDelete = () => {
     if (selectedRows.length === 0) {
-      setMessage("Vui lòng chọn sản phẩm muốn xoá");
+      setMessage("Vui lòng chọn muốn xoá");
       setOpenNotification(true);
     } else {
-      setMessage(`Xác nhận xoá ${selectedRows.length} sản phẩm đã chọn?`);
+      setMessage(`Xác nhận xoá ${selectedRows.length} đã chọn?`);
       setOpenSubmitDelete(true);
     }
   };
@@ -117,9 +124,9 @@ const ProductsMain = () => {
     let hasError = false;
     for (const id of idsToDelete) {
       try {
-        const response = await ProductOp.deleteProductInfo(
+        const response = await SalesOrderOp.deleteSalesOrderInfo(
           { token },
-          { productID: id.toString() }
+          { salesOrderHeaderID: id.toString() }
         );
         if (response.error) {
           hasError = true;
@@ -133,9 +140,9 @@ const ProductsMain = () => {
 
     setOpenSubmitDelete(false);
     if (hasError) {
-      setMessage("Đã có lỗi xảy ra trong quá trình xóa 1 số sản phẩm");
+      setMessage("Đã có lỗi xảy ra trong quá trình ");
     } else {
-      setMessage("Xóa sản phẩm thành công.");
+      setMessage("Xóa thành công.");
     }
     reloadData();
     setSelectedRows([]);
@@ -143,41 +150,47 @@ const ProductsMain = () => {
   };
 
   const submit = () => {
-    if (openProductDetail) {
-      submitUpdateProduct(productDetail.id.toString());
+    if (openSalesOrderDetail) {
+      submitUpdateSalesOrder(salesOrderDetail.id.toString());
     } else {
-      submitCreateProduct();
+      submitCreateSalesOrder();
     }
   };
 
-  const submitCreateProduct = async () => {
+  const submitCreateSalesOrder = async () => {
     setLoading(true);
-    if (!validateFields(productData)) return;
+    if (!validateFields(salesOrderData)) return;
 
     const token = localStorage?.getItem("accessToken");
-    const response = await ProductOp.createProductInfo({ token }, productData);
+    const response = await SalesOrderOp.createSalesOrderInfo(
+      { token },
+      salesOrderData
+    );
 
     if (response.error) {
       setMessage("Đã có lỗi xảy ra, vui lòng thử lại sau");
     } else {
-      setMessage("Tạo sản phẩm thành công");
+      setMessage("Tạo thành công");
     }
     setOpenNotification(true);
     setLoading(false);
   };
 
-  const submitUpdateProduct = async (productID: string) => {
+  const submitUpdateSalesOrder = async (id: string) => {
     setLoading(true);
-    if (!validateFields(productDetail)) return;
+    if (!validateFields(salesOrderDetail)) return;
 
     const token = localStorage?.getItem("accessToken");
-    const updateData = { ...productData, productID };
-    const response = await ProductOp.updateProductInfo({ token }, updateData);
+    const updateData = { ...salesOrderData, id };
+    const response = await SalesOrderOp.updateSpecialOfferInfo(
+      { token },
+      updateData
+    );
 
     if (response.error) {
       setMessage("Đã có lỗi xảy ra, vui lòng thử lại sau");
     } else {
-      setMessage("Cập nhật sản phẩm thành công");
+      setMessage("Cập nhật thành công");
     }
     setOpenNotification(true);
     setLoading(false);
@@ -198,18 +211,19 @@ const ProductsMain = () => {
     return Math.abs(offset) * velocity;
   };
 
-  const handleChange = (id: keyof ProductInfo, value: string) => {
-    setProductDetail((prev) => ({ ...prev, [id]: value }));
+  const handleChange = (id: keyof SalesOrderInfo, value: string) => {
+    setSalesOrderDetail((prev) => ({ ...prev, [id]: value }));
   };
 
-  const handleChange2 = (id: keyof CreateProductInfo, value: string) => {
-    setProductData((prev) => ({ ...prev, [id]: value }));
+  const handleChange2 = (id: keyof CreateSalesOrderInfo, value: string) => {
+    setSalesOrderData((prev) => ({ ...prev, [id]: value }));
   };
 
-  const validateFields = (data: CreateProductInfo) => {
-    const missingFields = productFields
+  const validateFields = (data: CreateSalesOrderInfo) => {
+    const missingFields = salesorderFields
       .filter(
-        (field) => field.important && !data[field.id as keyof CreateProductInfo]
+        (field) =>
+          field.important && !data[field.id as keyof CreateSalesOrderInfo]
       )
       .map((field) => intl.formatMessage({ id: field.label }));
 
@@ -225,57 +239,29 @@ const ProductsMain = () => {
 
   const swipeConfidenceThreshold = 1;
 
-  const productFields: Array<{
-    id: keyof ProductInfo | CreateProductInfo;
+  const salesorderFields: Array<{
+    id: keyof SalesOrderInfo | CreateSalesOrderInfo;
     type: string;
     label: string;
     disable?: boolean;
     important?: boolean;
     onChange?: (
-      id: keyof ProductInfo | CreateProductInfo,
+      id: keyof SalesOrderInfo | CreateSalesOrderInfo,
       value: string
     ) => void;
   }> = [
-    { id: "Name", type: "text", label: "Product.Name", important: true },
-    {
-      id: "Manufacturer",
-      type: "text",
-      label: "Product.Manufacturer",
-      important: true,
-    },
-    { id: "Summary", type: "text", label: "Product.Summary", important: true },
-    {
-      id: "WarrantyPeriod",
-      type: "text",
-      label: "Product.WarrantyPeriod",
-      important: true,
-    },
-    {
-      id: "RiderExperience",
-      type: "text",
-      label: "Product.RiderExperience",
-      important: true,
-    },
-    {
-      id: "Description",
-      type: "text",
-      label: "Product.Description",
-      important: true,
-    },
-    { id: "Size", type: "text", label: "Product.Size", important: true },
-    { id: "Style", type: "text", label: "Product.Style", important: true },
-    {
-      id: "ListPrice",
-      type: "text",
-      label: "Product.ListPrice",
-      important: true,
-    },
-    {
-      id: "StandardCost",
-      type: "text",
-      label: "Product.StandardCost",
-      important: true,
-    },
+    { id: "OrderDate", type: "text", label: "Order Date", important: true },
+    { id: "DueDate", type: "text", label: "Due Date", important: true },
+    { id: "ShipDate", type: "text", label: "Ship Date", important: true },
+    { id: "ShipMethod", type: "text", label: "Ship Method", important: true },
+    { id: "Comment", type: "text", label: "Comment", important: false },
+    { id: "SubTotal", type: "text", label: "Sub Total", important: true },
+    { id: "TaxAmt", type: "text", label: "Tax Amount", important: true },
+    { id: "Freight", type: "text", label: "Freight", important: true },
+    { id: "TotalDue", type: "text", label: "Total Due", important: true },
+    { id: "Employee", type: "number", label: "Employee ID", important: true },
+    { id: "Customer", type: "number", label: "Customer ID", important: true },
+    { id: "Territory", type: "number", label: "Territory ID", important: true },
   ];
 
   const options = [
@@ -299,17 +285,17 @@ const ProductsMain = () => {
       id: 1,
       component: (
         <div className="flex flex-col gap-4 w-full h-full md:w-1/2 p-4">
-          {openProductDetail ? (
-            <ProductFields
-              data={productDetail}
+          {openSalesOrderDetail ? (
+            <SalesOrderFields
+              data={salesOrderDetail}
               handleChange={handleChange}
-              fields={productFields}
+              fields={salesorderFields}
             />
           ) : (
-            <ProductFields
-              data={productData}
+            <SalesOrderFields
+              data={salesOrderDetail}
               handleChange={handleChange2}
-              fields={productFields}
+              fields={salesorderFields}
             />
           )}
         </div>
@@ -416,7 +402,7 @@ const ProductsMain = () => {
           >
             {loading ? (
               <LoadingUI />
-            ) : openProductDetail ? (
+            ) : openSalesOrderDetail ? (
               "Chỉnh sửa"
             ) : (
               "Xác nhận tạo"

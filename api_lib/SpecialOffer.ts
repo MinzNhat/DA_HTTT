@@ -57,7 +57,7 @@ export class SpecialOfferOperation {
       });
 
       return response.status === 200
-        ? { error: false, data: response.data as SpecialOfferInfo }
+        ? { error: false, data: response.data as SpecialOfferInfo[] }
         : { error: true, data: null };
     } catch (err: any) {
       return { error: true, data: null };

@@ -3,17 +3,13 @@ import { useCallback, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { IoShareOutline } from "react-icons/io5";
 import { IoIosAdd, IoIosBrowsers } from "react-icons/io";
-import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import RenderCase from "@/components/rendercase";
 import NotiPopup from "@/components/notification";
 import SubmitPopup from "@/components/submit";
-import {
-  CreateProductInfo,
-  ProductInfo,
-  ProductOperation,
-} from "@/api_lib/Product";
-import ProductTable from "./Table";
-import ProductFields from "./ProductFields";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
+import { TerritoryInfo, TerritoryOperation } from "@/api_lib/Territory";
+import TerritoryTable from "./Table";
+import TerritoryFields from "./TeritoryFields";
 import { useIntl } from "react-intl";
 import LoadingUI from "@/components/loading";
 
@@ -44,148 +40,50 @@ const containerVariants = {
   exit: { opacity: 0, scale: 0.9, transition: { duration: 0.5 } },
 };
 
-const ProductsMain = () => {
+const TerritoryMain = () => {
   const intl = useIntl();
-  const ProductOp = new ProductOperation();
+  const TerritoryOp = new TerritoryOperation();
   const [[page, direction], setPage] = useState([0, 0]);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [selectedRows, setSelectedRows] = useState<ProductInfo[]>([]);
+  const [selectedRows, setSelectedRows] = useState<TerritoryInfo[]>([]);
   const [message, setMessage] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [productDetail, setProductDetail] = useState<ProductInfo>({
+  const [territoryDetail, setTerritoryDetail] = useState<TerritoryInfo>({
     id: 0,
     Name: "",
-    Manufacturer: "",
-    Summary: "",
-    WarrantyPeriod: "",
-    RiderExperience: "",
-    Description: "",
-    Size: "",
-    Style: "",
-    StandardCost: "",
-    ListPrice: "",
+    Group: "",
+    SalesYTD: "",
+    SalesLastYear: "",
   });
   const [openNotification, setOpenNotification] = useState<boolean>(false);
-  const [openProductDetail, setOpenProductDetail] = useState<boolean>(false);
-  const [openSubmitDelete, setOpenSubmitDelete] = useState<boolean>(false);
-  const [productData, setProductData] = useState<CreateProductInfo>({
+  const [openTerritoryDetail, setOpenTerritoryDetail] =
+    useState<boolean>(false);
+  const [territoryData, setTerritoryData] = useState<TerritoryInfo>({
+    id: 0,
     Name: "",
-    Manufacturer: "",
-    Summary: "",
-    WarrantyPeriod: "",
-    RiderExperience: "",
-    Description: "",
-    Size: "",
-    Style: "",
-    StandardCost: "",
-    ListPrice: "",
+    Group: "",
+    SalesYTD: "",
+    SalesLastYear: "",
   });
-  const [data, setData] = useState<ProductInfo[] | null>(null);
+  const [data, setData] = useState<TerritoryInfo[] | null>(null);
 
   const reloadData = useCallback(async () => {
     setData(null);
     const token = localStorage?.getItem("accessToken");
-    const response = await ProductOp.getSpecialOffer({ token });
+    const response = await TerritoryOp.getTerritory({ token: token || "" });
     if (response.data) setData(response.data);
   }, []);
 
   const openAdd = () => {
-    setOpenProductDetail(false);
+    setOpenTerritoryDetail(false);
     paginate(1);
   };
 
-  const openDetail = (data: ProductInfo) => {
-    setProductDetail(data);
-    setOpenProductDetail(true);
+  const openDetail = (data: TerritoryInfo) => {
+    setTerritoryDetail(data);
+    setOpenTerritoryDetail(true);
     paginate(1);
   };
-
-  const handleDelete = () => {
-    if (selectedRows.length === 0) {
-      setMessage("Vui lòng chọn sản phẩm muốn xoá");
-      setOpenNotification(true);
-    } else {
-      setMessage(`Xác nhận xoá ${selectedRows.length} sản phẩm đã chọn?`);
-      setOpenSubmitDelete(true);
-    }
-  };
-
-  const confirmDelete = async () => {
-    const token = localStorage?.getItem("accessToken");
-    const idsToDelete = selectedRows.map((row) => row.id);
-
-    let hasError = false;
-    for (const id of idsToDelete) {
-      try {
-        const response = await ProductOp.deleteProductInfo(
-          { token },
-          { productID: id.toString() }
-        );
-        if (response.error) {
-          hasError = true;
-          break;
-        }
-      } catch (error) {
-        hasError = true;
-        break;
-      }
-    }
-
-    setOpenSubmitDelete(false);
-    if (hasError) {
-      setMessage("Đã có lỗi xảy ra trong quá trình xóa 1 số sản phẩm");
-    } else {
-      setMessage("Xóa sản phẩm thành công.");
-    }
-    reloadData();
-    setSelectedRows([]);
-    setOpenNotification(true);
-  };
-
-  const submit = () => {
-    if (openProductDetail) {
-      submitUpdateProduct(productDetail.id.toString());
-    } else {
-      submitCreateProduct();
-    }
-  };
-
-  const submitCreateProduct = async () => {
-    setLoading(true);
-    if (!validateFields(productData)) return;
-
-    const token = localStorage?.getItem("accessToken");
-    const response = await ProductOp.createProductInfo({ token }, productData);
-
-    if (response.error) {
-      setMessage("Đã có lỗi xảy ra, vui lòng thử lại sau");
-    } else {
-      setMessage("Tạo sản phẩm thành công");
-    }
-    setOpenNotification(true);
-    setLoading(false);
-  };
-
-  const submitUpdateProduct = async (productID: string) => {
-    setLoading(true);
-    if (!validateFields(productDetail)) return;
-
-    const token = localStorage?.getItem("accessToken");
-    const updateData = { ...productData, productID };
-    const response = await ProductOp.updateProductInfo({ token }, updateData);
-
-    if (response.error) {
-      setMessage("Đã có lỗi xảy ra, vui lòng thử lại sau");
-    } else {
-      setMessage("Cập nhật sản phẩm thành công");
-    }
-    setOpenNotification(true);
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    reloadData();
-  }, [reloadData]);
 
   const paginate = useCallback(
     (targetPage: number) => {
@@ -198,18 +96,18 @@ const ProductsMain = () => {
     return Math.abs(offset) * velocity;
   };
 
-  const handleChange = (id: keyof ProductInfo, value: string) => {
-    setProductDetail((prev) => ({ ...prev, [id]: value }));
+  const handleChange = (id: keyof TerritoryInfo, value: string) => {
+    setTerritoryDetail((prev) => ({ ...prev, [id]: value }));
   };
 
-  const handleChange2 = (id: keyof CreateProductInfo, value: string) => {
-    setProductData((prev) => ({ ...prev, [id]: value }));
+  const handleChange2 = (id: keyof TerritoryInfo, value: string) => {
+    setTerritoryData((prev) => ({ ...prev, [id]: value }));
   };
 
-  const validateFields = (data: CreateProductInfo) => {
-    const missingFields = productFields
+  const validateFields = (data: TerritoryInfo) => {
+    const missingFields = territoryFields
       .filter(
-        (field) => field.important && !data[field.id as keyof CreateProductInfo]
+        (field) => field.important && !data[field.id as keyof TerritoryInfo]
       )
       .map((field) => intl.formatMessage({ id: field.label }));
 
@@ -225,55 +123,26 @@ const ProductsMain = () => {
 
   const swipeConfidenceThreshold = 1;
 
-  const productFields: Array<{
-    id: keyof ProductInfo | CreateProductInfo;
+  const territoryFields: Array<{
+    id: keyof TerritoryInfo;
     type: string;
     label: string;
     disable?: boolean;
     important?: boolean;
-    onChange?: (
-      id: keyof ProductInfo | CreateProductInfo,
-      value: string
-    ) => void;
+    onChange?: (id: keyof TerritoryInfo, value: string) => void;
   }> = [
-    { id: "Name", type: "text", label: "Product.Name", important: true },
+    { id: "Name", type: "text", label: "Territory.Name", important: true },
+    { id: "Group", type: "text", label: "Territory.Group", important: true },
     {
-      id: "Manufacturer",
+      id: "SalesYTD",
       type: "text",
-      label: "Product.Manufacturer",
-      important: true,
-    },
-    { id: "Summary", type: "text", label: "Product.Summary", important: true },
-    {
-      id: "WarrantyPeriod",
-      type: "text",
-      label: "Product.WarrantyPeriod",
+      label: "Territory.SalesYTD",
       important: true,
     },
     {
-      id: "RiderExperience",
+      id: "SalesLastYear",
       type: "text",
-      label: "Product.RiderExperience",
-      important: true,
-    },
-    {
-      id: "Description",
-      type: "text",
-      label: "Product.Description",
-      important: true,
-    },
-    { id: "Size", type: "text", label: "Product.Size", important: true },
-    { id: "Style", type: "text", label: "Product.Style", important: true },
-    {
-      id: "ListPrice",
-      type: "text",
-      label: "Product.ListPrice",
-      important: true,
-    },
-    {
-      id: "StandardCost",
-      type: "text",
-      label: "Product.StandardCost",
+      label: "Territory.SalesLastYear",
       important: true,
     },
   ];
@@ -282,7 +151,7 @@ const ProductsMain = () => {
     {
       id: 0,
       component: (
-        <ProductTable
+        <TerritoryTable
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
           tableData={data}
@@ -291,7 +160,6 @@ const ProductsMain = () => {
           onRowClick={openDetail}
           selectedRows={selectedRows}
           setSelectedRows={setSelectedRows}
-          handleDelete={handleDelete}
         />
       ),
     },
@@ -299,17 +167,17 @@ const ProductsMain = () => {
       id: 1,
       component: (
         <div className="flex flex-col gap-4 w-full h-full md:w-1/2 p-4">
-          {openProductDetail ? (
-            <ProductFields
-              data={productDetail}
+          {openTerritoryDetail ? (
+            <TerritoryFields
+              data={territoryDetail}
               handleChange={handleChange}
-              fields={productFields}
+              fields={territoryFields}
             />
           ) : (
-            <ProductFields
-              data={productData}
+            <TerritoryFields
+              data={territoryData}
               handleChange={handleChange2}
-              fields={productFields}
+              fields={territoryFields}
             />
           )}
         </div>
@@ -326,15 +194,6 @@ const ProductsMain = () => {
         />
       </RenderCase>
 
-      <RenderCase renderIf={openSubmitDelete}>
-        <SubmitPopup
-          message={message}
-          onClose={() => {
-            setOpenSubmitDelete(false);
-          }}
-          submit={confirmDelete}
-        />
-      </RenderCase>
       <div className="sticky top-0 w-full flex gap-2 z-10 bg-white dark:bg-[#242526] h-12 min-h-12 px-2 justify-center place-items-center">
         <div className="gap-1 px-1 flex">
           <FaAngleLeft
@@ -416,7 +275,7 @@ const ProductsMain = () => {
           >
             {loading ? (
               <LoadingUI />
-            ) : openProductDetail ? (
+            ) : openTerritoryDetail ? (
               "Chỉnh sửa"
             ) : (
               "Xác nhận tạo"
@@ -428,4 +287,4 @@ const ProductsMain = () => {
   );
 };
 
-export default ProductsMain;
+export default TerritoryMain;

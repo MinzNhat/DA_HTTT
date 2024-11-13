@@ -8,12 +8,12 @@ import RenderCase from "@/components/rendercase";
 import NotiPopup from "@/components/notification";
 import SubmitPopup from "@/components/submit";
 import {
-  CreateProductInfo,
-  ProductInfo,
-  ProductOperation,
-} from "@/api_lib/Product";
+  CreateSpecialOffer,
+  SpecialOfferInfo,
+  SpecialOfferOperation,
+} from "@/api_lib/SpecialOffer";
 import ProductTable from "./Table";
-import ProductFields from "./ProductFields";
+import SpecialOfferFields from "./SpecialOfferFields";
 import { useIntl } from "react-intl";
 import LoadingUI from "@/components/loading";
 
@@ -44,59 +44,55 @@ const containerVariants = {
   exit: { opacity: 0, scale: 0.9, transition: { duration: 0.5 } },
 };
 
-const ProductsMain = () => {
+const SpecialOfferMain = () => {
   const intl = useIntl();
-  const ProductOp = new ProductOperation();
+  const SpecialOfferOp = new SpecialOfferOperation();
   const [[page, direction], setPage] = useState([0, 0]);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [selectedRows, setSelectedRows] = useState<ProductInfo[]>([]);
+  const [selectedRows, setSelectedRows] = useState<SpecialOfferInfo[]>([]);
   const [message, setMessage] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [productDetail, setProductDetail] = useState<ProductInfo>({
-    id: 0,
-    Name: "",
-    Manufacturer: "",
-    Summary: "",
-    WarrantyPeriod: "",
-    RiderExperience: "",
-    Description: "",
-    Size: "",
-    Style: "",
-    StandardCost: "",
-    ListPrice: "",
-  });
+  const [specialOfferDetail, setSpecialOfferDetail] =
+    useState<SpecialOfferInfo>({
+      id: 0,
+      Description: "",
+      DiscountPct: "",
+      Type: "",
+      StartDate: "",
+      MinQty: 0,
+      MaxQty: 0,
+      EndDate: "",
+    });
   const [openNotification, setOpenNotification] = useState<boolean>(false);
-  const [openProductDetail, setOpenProductDetail] = useState<boolean>(false);
+  const [openSpecialOfferDetail, setOpenSpecialOfferDetail] =
+    useState<boolean>(false);
   const [openSubmitDelete, setOpenSubmitDelete] = useState<boolean>(false);
-  const [productData, setProductData] = useState<CreateProductInfo>({
-    Name: "",
-    Manufacturer: "",
-    Summary: "",
-    WarrantyPeriod: "",
-    RiderExperience: "",
+  const [specialOfferData, setSpecialOfferData] = useState<CreateSpecialOffer>({
     Description: "",
-    Size: "",
-    Style: "",
-    StandardCost: "",
-    ListPrice: "",
+    DiscountPct: "",
+    Type: "",
+    StartDate: "",
+    EndDate: "",
+    MinQty: 0,
+    MaxQty: 0,
   });
-  const [data, setData] = useState<ProductInfo[] | null>(null);
+  const [data, setData] = useState<SpecialOfferInfo[] | null>(null);
 
   const reloadData = useCallback(async () => {
     setData(null);
     const token = localStorage?.getItem("accessToken");
-    const response = await ProductOp.getSpecialOffer({ token });
+    const response = await SpecialOfferOp.getSpecialOffer({ token });
     if (response.data) setData(response.data);
   }, []);
 
   const openAdd = () => {
-    setOpenProductDetail(false);
+    setOpenSpecialOfferDetail(false);
     paginate(1);
   };
 
-  const openDetail = (data: ProductInfo) => {
-    setProductDetail(data);
-    setOpenProductDetail(true);
+  const openDetail = (data: SpecialOfferInfo) => {
+    setSpecialOfferDetail(data);
+    setOpenSpecialOfferDetail(true);
     paginate(1);
   };
 
@@ -117,9 +113,9 @@ const ProductsMain = () => {
     let hasError = false;
     for (const id of idsToDelete) {
       try {
-        const response = await ProductOp.deleteProductInfo(
+        const response = await SpecialOfferOp.deleteSpecialOfferInfo(
           { token },
-          { productID: id.toString() }
+          { specialOfferID: id.toString() }
         );
         if (response.error) {
           hasError = true;
@@ -143,41 +139,47 @@ const ProductsMain = () => {
   };
 
   const submit = () => {
-    if (openProductDetail) {
-      submitUpdateProduct(productDetail.id.toString());
+    if (openSpecialOfferDetail) {
+      submitUpdateSpecialOffer(specialOfferDetail.id.toString());
     } else {
-      submitCreateProduct();
+      submitCreateSpecialOffer();
     }
   };
 
-  const submitCreateProduct = async () => {
+  const submitCreateSpecialOffer = async () => {
     setLoading(true);
-    if (!validateFields(productData)) return;
+    if (!validateFields(specialOfferData)) return;
 
     const token = localStorage?.getItem("accessToken");
-    const response = await ProductOp.createProductInfo({ token }, productData);
+    const response = await SpecialOfferOp.createSpecialOfferInfo(
+      { token },
+      specialOfferData
+    );
 
     if (response.error) {
       setMessage("Đã có lỗi xảy ra, vui lòng thử lại sau");
     } else {
-      setMessage("Tạo sản phẩm thành công");
+      setMessage("Tạo thành công");
     }
     setOpenNotification(true);
     setLoading(false);
   };
 
-  const submitUpdateProduct = async (productID: string) => {
+  const submitUpdateSpecialOffer = async (specialOfferID: string) => {
     setLoading(true);
-    if (!validateFields(productDetail)) return;
+    if (!validateFields(specialOfferDetail)) return;
 
     const token = localStorage?.getItem("accessToken");
-    const updateData = { ...productData, productID };
-    const response = await ProductOp.updateProductInfo({ token }, updateData);
+    const updateData = { ...specialOfferData, specialOfferID };
+    const response = await SpecialOfferOp.updateSpecialOfferInfo(
+      { token },
+      updateData
+    );
 
     if (response.error) {
       setMessage("Đã có lỗi xảy ra, vui lòng thử lại sau");
     } else {
-      setMessage("Cập nhật sản phẩm thành công");
+      setMessage("Cập nhật thành công");
     }
     setOpenNotification(true);
     setLoading(false);
@@ -198,18 +200,19 @@ const ProductsMain = () => {
     return Math.abs(offset) * velocity;
   };
 
-  const handleChange = (id: keyof ProductInfo, value: string) => {
-    setProductDetail((prev) => ({ ...prev, [id]: value }));
+  const handleChange = (id: keyof SpecialOfferInfo, value: string) => {
+    setSpecialOfferDetail((prev) => ({ ...prev, [id]: value }));
   };
 
-  const handleChange2 = (id: keyof CreateProductInfo, value: string) => {
-    setProductData((prev) => ({ ...prev, [id]: value }));
+  const handleChange2 = (id: keyof CreateSpecialOffer, value: string) => {
+    setSpecialOfferData((prev) => ({ ...prev, [id]: value }));
   };
 
-  const validateFields = (data: CreateProductInfo) => {
-    const missingFields = productFields
+  const validateFields = (data: CreateSpecialOffer) => {
+    const missingFields = specialOfferFields
       .filter(
-        (field) => field.important && !data[field.id as keyof CreateProductInfo]
+        (field) =>
+          field.important && !data[field.id as keyof CreateSpecialOffer]
       )
       .map((field) => intl.formatMessage({ id: field.label }));
 
@@ -225,57 +228,29 @@ const ProductsMain = () => {
 
   const swipeConfidenceThreshold = 1;
 
-  const productFields: Array<{
-    id: keyof ProductInfo | CreateProductInfo;
+  const specialOfferFields: Array<{
+    id: keyof SpecialOfferInfo | CreateSpecialOffer;
     type: string;
     label: string;
     disable?: boolean;
     important?: boolean;
     onChange?: (
-      id: keyof ProductInfo | CreateProductInfo,
+      id: keyof SpecialOfferInfo | CreateSpecialOffer,
       value: string
     ) => void;
   }> = [
-    { id: "Name", type: "text", label: "Product.Name", important: true },
+    { id: "Description", type: "text", label: "Description", important: true },
     {
-      id: "Manufacturer",
+      id: "DiscountPct",
       type: "text",
-      label: "Product.Manufacturer",
+      label: "Discount Percentage",
       important: true,
     },
-    { id: "Summary", type: "text", label: "Product.Summary", important: true },
-    {
-      id: "WarrantyPeriod",
-      type: "text",
-      label: "Product.WarrantyPeriod",
-      important: true,
-    },
-    {
-      id: "RiderExperience",
-      type: "text",
-      label: "Product.RiderExperience",
-      important: true,
-    },
-    {
-      id: "Description",
-      type: "text",
-      label: "Product.Description",
-      important: true,
-    },
-    { id: "Size", type: "text", label: "Product.Size", important: true },
-    { id: "Style", type: "text", label: "Product.Style", important: true },
-    {
-      id: "ListPrice",
-      type: "text",
-      label: "Product.ListPrice",
-      important: true,
-    },
-    {
-      id: "StandardCost",
-      type: "text",
-      label: "Product.StandardCost",
-      important: true,
-    },
+    { id: "Type", type: "text", label: "Type", important: true },
+    { id: "StartDate", type: "text", label: "Start Date", important: true },
+    { id: "EndDate", type: "text", label: "End Date", important: true },
+    { id: "MinQty", type: "text", label: "Min Quantity", important: true },
+    { id: "MaxQty", type: "text", label: "Max Quantity", important: true },
   ];
 
   const options = [
@@ -298,20 +273,33 @@ const ProductsMain = () => {
     {
       id: 1,
       component: (
-        <div className="flex flex-col gap-4 w-full h-full md:w-1/2 p-4">
-          {openProductDetail ? (
-            <ProductFields
-              data={productDetail}
-              handleChange={handleChange}
-              fields={productFields}
-            />
-          ) : (
-            <ProductFields
-              data={productData}
-              handleChange={handleChange2}
-              fields={productFields}
-            />
-          )}
+        <div className="flex flex-col gap-4">
+          <div className="w-full p-3 bg-white rounded-md shadow-lg">
+            <div className="font-bold text-black text-20">
+              {openSpecialOfferDetail ? "Cập nhật ưu đãi" : "Tạo ưu đãi"}
+            </div>
+          </div>
+          <SpecialOfferFields
+            fields={specialOfferFields}
+            data={
+              openSpecialOfferDetail ? specialOfferDetail : specialOfferData
+            }
+            handleChange={openSpecialOfferDetail ? handleChange : handleChange2}
+          />
+          <div className="flex gap-5">
+            <button
+              onClick={() => submit()}
+              className="bg-blue-500 text-white py-2 px-5 rounded-md"
+            >
+              {openSpecialOfferDetail ? "Cập nhật" : "Tạo"}
+            </button>
+            <button
+              onClick={() => paginate(0)}
+              className="bg-red-500 text-white py-2 px-5 rounded-md"
+            >
+              Hủy
+            </button>
+          </div>
         </div>
       ),
     },
@@ -416,7 +404,7 @@ const ProductsMain = () => {
           >
             {loading ? (
               <LoadingUI />
-            ) : openProductDetail ? (
+            ) : openSpecialOfferDetail ? (
               "Chỉnh sửa"
             ) : (
               "Xác nhận tạo"
@@ -428,4 +416,4 @@ const ProductsMain = () => {
   );
 };
 
-export default ProductsMain;
+export default SpecialOfferMain;

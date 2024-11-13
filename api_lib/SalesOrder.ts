@@ -83,7 +83,7 @@ export class SalesOrderOperation {
       );
 
       return response.status === 200
-        ? { error: false, data: response.data as SalesOrderInfo }
+        ? { error: false, data: response.data as SalesOrderInfo[] }
         : { error: true, data: null };
     } catch (err: any) {
       return { error: true, data: null };

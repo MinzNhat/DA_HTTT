@@ -29,7 +29,7 @@ export class TerritoryOperation {
       });
 
       return response.status === 200
-        ? { error: false, data: response.data as TerritoryInfo }
+        ? { error: false, data: response.data as TerritoryInfo[] }
         : { error: true, data: null };
     } catch (err: any) {
       return { error: true, data: null };
