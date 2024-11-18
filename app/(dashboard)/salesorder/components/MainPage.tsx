@@ -44,7 +44,7 @@ const containerVariants = {
   exit: { opacity: 0, scale: 0.9, transition: { duration: 0.5 } },
 };
 
-const ProductsMain = () => {
+const SaleOrdersMain = () => {
   const intl = useIntl();
   const SalesOrderOp = new SalesOrderOperation();
   const [[page, direction], setPage] = useState([0, 0]);
@@ -92,8 +92,10 @@ const ProductsMain = () => {
   const reloadData = useCallback(async () => {
     setData(null);
     const token = localStorage?.getItem("accessToken");
+    console.log(token);
     const response = await SalesOrderOp.getSpecialOffer({ token });
     if (response.data) setData(response.data);
+    console.log(response);
   }, []);
 
   const openAdd = () => {
@@ -414,4 +416,4 @@ const ProductsMain = () => {
   );
 };
 
-export default ProductsMain;
+export default SaleOrdersMain;

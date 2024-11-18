@@ -21,15 +21,21 @@ export class TerritoryOperation {
 
   async getTerritory(payload: TerritoryPayload) {
     try {
-      const response = await axios.get(`${this.baseUrl}/getallterritory/`, {
-        headers: {
-          Authorization: `Bearer ${payload.token}`,
-          "Content-Type": "application/json",
+      const response = await axios.post(
+        `${this.baseUrl}/getterritory/`,
+        {
+          page: 1,
         },
-      });
+        {
+          headers: {
+            Authorization: `Bearer ${payload.token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-      return response.status === 200
-        ? { error: false, data: response.data as TerritoryInfo[] }
+      return response.status === 202
+        ? { error: false, data: response.data.data as TerritoryInfo[] }
         : { error: true, data: null };
     } catch (err: any) {
       return { error: true, data: null };

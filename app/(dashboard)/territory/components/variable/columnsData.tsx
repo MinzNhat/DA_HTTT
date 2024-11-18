@@ -1,7 +1,7 @@
-import { ProductInfo } from "@/api_lib/Product";
+import { TerritoryInfo } from "@/api_lib/Territory";
 import { Column } from "react-table";
 
-export const columnsData: Column<ProductInfo>[] = [
+export const columnsData: Column<TerritoryInfo>[] = [
   {
     Header: "Mã số",
     accessor: "id",

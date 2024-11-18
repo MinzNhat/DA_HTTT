@@ -85,8 +85,11 @@ const ProductsMain = () => {
   const reloadData = useCallback(async () => {
     setData(null);
     const token = localStorage?.getItem("accessToken");
-    const response = await ProductOp.getSpecialOffer({ token });
-    if (response.data) setData(response.data);
+    if (token) {
+      const response = await ProductOp.getSpecialOffer({ token });
+      if (response.data) setData(response.data);
+      console.log(response);
+    }
   }, []);
 
   const openAdd = () => {

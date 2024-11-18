@@ -17,9 +17,11 @@ export interface UpdateUserInfo {
 
 export class UserOperation {
   private baseUrl: string;
+  private baseURL: string;
 
   constructor() {
     this.baseUrl = `${process.env.NEXT_PUBLIC_BACKEND_LOGIN_ENDPOINT!}/account`;
+    this.baseURL = `${process.env.NEXT_PUBLIC_BACKEND_LOGIN_ENDPOINT!}/sales`;
   }
 
   async getUserInfo(payload: UserOpPayload) {
@@ -32,7 +34,30 @@ export class UserOperation {
       });
 
       return response.status === 200
-        ? { error: false, data: response.data as UserInfo[] }
+        ? { error: false, data: response.data as UserInfo }
+        : { error: true, data: null };
+    } catch (err: any) {
+      return { error: true, data: null };
+    }
+  }
+
+  async getAllUserInfo(payload: UserOpPayload) {
+    try {
+      const response = await axios.post(
+        `${this.baseURL}/getcustomer/`,
+        {
+          page: 1,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${payload.token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      return response.status === 202
+        ? { error: false, data: response.data.data as UserInfo[] }
         : { error: true, data: null };
     } catch (err: any) {
       return { error: true, data: null };
@@ -53,7 +78,7 @@ export class UserOperation {
       );
 
       return response.status === 202
-        ? { error: false, data: response.data as UserInfo }
+        ? { error: false, data: response.data.data as UserInfo }
         : { error: true, data: null };
     } catch (err: any) {
       return { error: true, data: null };

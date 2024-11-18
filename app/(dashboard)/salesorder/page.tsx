@@ -1,17 +1,16 @@
-
 import { Metadata } from "next";
-import ProductsMain from "./components/MainPage";
+import SalesOrderMain from "./components/MainPage";
 
 export const metadata: Metadata = {
-    title: 'HCMUT | Product',
-}
-
-const ProductPage = () => {
-    return (
-        <div className="w-full h-full">
-            <ProductsMain />
-        </div>
-    );
+  title: "HCMUT | SalesOrder",
 };
 
-export default ProductPage;
+const SalesOrderPage = () => {
+  return (
+    <div className="w-full h-full">
+      <SalesOrderMain />
+    </div>
+  );
+};
+
+export default SalesOrderPage;

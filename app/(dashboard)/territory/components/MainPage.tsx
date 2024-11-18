@@ -70,7 +70,7 @@ const TerritoryMain = () => {
   const reloadData = useCallback(async () => {
     setData(null);
     const token = localStorage?.getItem("accessToken");
-    const response = await TerritoryOp.getTerritory({ token: token || "" });
+    const response = await TerritoryOp.getTerritory({ token });
     if (response.data) setData(response.data);
   }, []);
 
@@ -267,21 +267,7 @@ const TerritoryMain = () => {
           animate="visible"
           exit="exit"
           className="w-full px-2 pb-2"
-        >
-          <button
-            onClick={submit}
-            className="linear w-full !rounded-md bg-brand-500 py-[10px] text-base font-medium text-white transition duration-200 
-                        hover:bg-brand-600 active:bg-brand-700 dark:text-white dark:hover:bg-brand-300 dark:active:bg-brand-200 flex justify-center"
-          >
-            {loading ? (
-              <LoadingUI />
-            ) : openTerritoryDetail ? (
-              "Chỉnh sửa"
-            ) : (
-              "Xác nhận tạo"
-            )}
-          </button>
-        </motion.div>
+        ></motion.div>
       </RenderCase>
     </div>
   );

@@ -49,15 +49,21 @@ export class SpecialOfferOperation {
 
   async getSpecialOffer(payload: SpecialOfferPayload) {
     try {
-      const response = await axios.get(`${this.baseUrl}/getallspecialoffer/`, {
-        headers: {
-          Authorization: `Bearer ${payload.token}`,
-          "Content-Type": "application/json",
+      const response = await axios.post(
+        `${this.baseUrl}/getspecialoffer/`,
+        {
+          page: 1,
         },
-      });
+        {
+          headers: {
+            Authorization: `Bearer ${payload.token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-      return response.status === 200
-        ? { error: false, data: response.data as SpecialOfferInfo[] }
+      return response.status === 202
+        ? { error: false, data: response.data.data as SpecialOfferInfo[] }
         : { error: true, data: null };
     } catch (err: any) {
       return { error: true, data: null };

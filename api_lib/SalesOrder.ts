@@ -72,8 +72,11 @@ export class SalesOrderOperation {
 
   async getSpecialOffer(payload: SalesOrderPayload) {
     try {
-      const response = await axios.get(
-        `${this.baseUrl}/getsalesorderinformation/`,
+      const response = await axios.post(
+        `${this.baseUrl}/getsalesorder/`,
+        {
+          page: 1,
+        },
         {
           headers: {
             Authorization: `Bearer ${payload.token}`,
@@ -82,8 +85,8 @@ export class SalesOrderOperation {
         }
       );
 
-      return response.status === 200
-        ? { error: false, data: response.data as SalesOrderInfo[] }
+      return response.status === 202
+        ? { error: false, data: response.data.data as SalesOrderInfo[] }
         : { error: true, data: null };
     } catch (err: any) {
       return { error: true, data: null };
