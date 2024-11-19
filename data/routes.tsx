@@ -1,5 +1,8 @@
 import { FaPlusCircle } from "react-icons/fa";
-import { MdOutlineProductionQuantityLimits, MdOutlineSettingsSuggest } from "react-icons/md";
+import {
+  MdOutlineProductionQuantityLimits,
+  MdOutlineSettingsSuggest,
+} from "react-icons/md";
 const routes = [
   {
     name: "Trang chủ",
@@ -14,6 +17,11 @@ const routes = [
   {
     name: "Sản phẩm",
     path: "products",
+    icon: <MdOutlineProductionQuantityLimits className="h-5 w-5" />,
+  },
+  {
+    name: "Đơn bán hàng",
+    path: "saleorders",
     icon: <MdOutlineProductionQuantityLimits className="h-5 w-5" />,
   },
 ];
