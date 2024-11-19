@@ -7,9 +7,11 @@ import { apps } from "../data/appList";
 import { useState, useEffect } from "react";
 import RenderCase from "@/components/rendercase";
 import { useSearchContext } from "@/providers/SearchProvider";
+import { useOpenAppDataContext } from "@/providers/OpenAppProvider";
 
 const MenuList = () => {
     const { search } = useSearchContext();
+    const { setOpenApp } = useOpenAppDataContext();
     const [debouncedSearch, setDebouncedSearch] = useState<string>("");
     const [profileHeight, setProfileHeight] = useState<number | null>(null);
 
@@ -52,12 +54,13 @@ const MenuList = () => {
                         transition={{ duration: 0.4, delay: index * 0.1 }}
                     >
                         <div
-                            className={`${app.className} ${app.name === "Camera" ? 'profile-element' : ''} flex flex-col items-center justify-center w-full 
+                            className={`${app.className} ${app.name === "Special Offer" ? 'profile-element' : ''} flex flex-col items-center justify-center w-full 
                             backdrop-blur-xl bg-white/70 lg:bg-white/80 dark:bg-[#242526]/70 rounded-lg shadow-lg cursor-pointer`}
                             style={{
-                                ...(app.name === "Documents" && profileHeight ? { height: profileHeight } : {}),
+                                ...(app.name === "Territory" && profileHeight ? { height: profileHeight } : {}),
                                 ...(app.name === "Music" ? { height: '100%', maxHeight: profileHeight ? `${profileHeight * 2 + 24}px` : 'none' } : {}),
                             }}
+                            onClick={() => { app.name !== "Music" ? setOpenApp({ appName: app.link, openApp: true }) : null }}
                         >
                             <RenderCase renderIf={app.name === "Music"}>
                                 <MusicApp />

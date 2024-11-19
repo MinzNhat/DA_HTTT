@@ -188,6 +188,8 @@ export const UserAuthProvider = ({ children }: Props) => {
                 { headers: { 'Content-Type': 'application/json' } }
             );
 
+            console.log(response)
+
             if (response.status === 204) {
                 error = false
             } else {

@@ -111,18 +111,17 @@ const Navbar: FC<Props> = ({ openApp }) => {
         <NotiPopup message={message} onClose={logout} />
       </RenderCase>
       <div
-        className={` h-7 ${
-          openApp
-            ? "bg-white dark:bg-[#242526] shadow-[4px_-4px_10px_rgba(0,0,0,0.3)]"
-            : "backdrop-blur-xl bg-white/80 dark:bg-[#242526]/50"
-        } flex gap-4 justify-between transition-all duration-200 px-2 py-1 rounded-md`}
+        className={` h-7 ${openApp
+          ? "bg-white dark:bg-[#242526] shadow-[4px_-4px_10px_rgba(0,0,0,0.3)]"
+          : "backdrop-blur-xl bg-white/80 dark:bg-[#242526]/50"
+          } flex gap-4 justify-between transition-all duration-200 px-2 py-1 rounded-md`}
       >
         <div className="w-1/3">
           <Dropdown
             button={
               <div
                 className={`text-sm font-semibold text-blue-700 hover:text-brand-600 dark:text-white visible flex place-items-center`}
-                onClick={() => {}}
+                onClick={() => { }}
               >
                 <Image
                   src="/logo.ico"
@@ -158,8 +157,8 @@ const Navbar: FC<Props> = ({ openApp }) => {
                   {charging == true
                     ? "Đang sạc"
                     : charging == false
-                    ? "Không cắm sạc"
-                    : "Không hỗ trỡ"}
+                      ? "Không cắm sạc"
+                      : "Không hỗ trỡ"}
                 </button>
               </div>
               <div className="h-[0.5px] w-full bg-gray-200 dark:bg-white/10 " />
@@ -203,7 +202,7 @@ const Navbar: FC<Props> = ({ openApp }) => {
             )}
           </div>
           <div className="text-blue-700 dark:text-white font-semibold text-xs hidden sm:block">
-            {level && typeof level == "number" ? level * 100 : 40}%
+            {level && typeof level == "number" ? (level * 100).toFixed(2) : 40}%
           </div>
           <div className="w-8 sm:w-10 flex justify-center place-items-center relative">
             <Progress
@@ -218,7 +217,7 @@ const Navbar: FC<Props> = ({ openApp }) => {
               <BsFillLightningChargeFill />
             </div>
             <div className="absolute text-blue-700 dark:text-white font-semibold text-xs sm:hidden">
-              {level && typeof level == "number" ? level * 100 : 40}
+              {level && typeof level == "number" ? (level * 100).toFixed(2) : 40}
             </div>
           </div>
           <div className="text-sm font-semibold text-blue-700 dark:text-white hidden sm:block">

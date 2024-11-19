@@ -10,8 +10,8 @@ export interface ProductInfo {
   Description: string;
   Size: string;
   Style: string;
-  StandardCost: string;
-  ListPrice: string;
+  StandardCost: number;
+  ListPrice: number;
 }
 
 // export interface UpdateProductInfo {
@@ -49,6 +49,10 @@ export interface DeleteProduct {
   productID: String;
 }
 
+interface GetProduct {
+  currentPage: number;
+}
+
 interface ProductPayload {
   token: string;
 }
@@ -60,12 +64,12 @@ export class ProductOperation {
     this.baseUrl = `${process.env.NEXT_PUBLIC_BACKEND_LOGIN_ENDPOINT!}/sales`;
   }
 
-  async getSpecialOffer(payload: ProductPayload) {
+  async getSpecialOffer(payload: ProductPayload, getData: GetProduct) {
     try {
       const response = await axios.post(
         `${this.baseUrl}/getproduct/`,
         {
-          page: 1,
+          page: getData.currentPage,
         },
         {
           headers: {
@@ -79,6 +83,7 @@ export class ProductOperation {
         ? { error: false, data: response.data.data as ProductInfo[] }
         : { error: true, data: null };
     } catch (err: any) {
+      console.log(err)
       return { error: true, data: null };
     }
   }
@@ -88,8 +93,9 @@ export class ProductOperation {
     updateData: UpdateProductInfo
   ) {
     try {
+      console.log(updateData)
       const response = await axios.post(
-        `${this.baseUrl}/editproductinformation/`,
+        `${this.baseUrl}/editproduct/`,
         updateData,
         {
           headers: {
@@ -98,12 +104,12 @@ export class ProductOperation {
           },
         }
       );
-      console.log(response);
 
       return response.status === 202
         ? { error: false, data: response.data as ProductInfo }
         : { error: true, data: null };
     } catch (err: any) {
+      console.log(err)
       return { error: true, data: null };
     }
   }
@@ -125,6 +131,7 @@ export class ProductOperation {
         ? { error: false, data: response.data as ProductInfo }
         : { error: true, data: null };
     } catch (err: any) {
+      console.log(err)
       return { error: true, data: null };
     }
   }
@@ -134,8 +141,9 @@ export class ProductOperation {
     updateData: CreateProductInfo
   ) {
     try {
+      console.log(updateData)
       const response = await axios.post(
-        `${this.baseUrl}/createspecialoffer/`,
+        `${this.baseUrl}/createproduct/`,
         updateData,
         {
           headers: {
@@ -149,6 +157,7 @@ export class ProductOperation {
         ? { error: false, data: response.data as ProductInfo }
         : { error: true, data: null };
     } catch (err: any) {
+      console.log(err)
       return { error: true, data: null };
     }
   }
