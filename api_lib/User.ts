@@ -1,6 +1,10 @@
 import axios from "axios";
 import { UserInfo } from "@/providers/PassedData";
 
+interface GetAllUser {
+  currentPage: number;
+}
+
 interface UserOpPayload {
   token: string;
 }
@@ -41,12 +45,12 @@ export class UserOperation {
     }
   }
 
-  async getAllUserInfo(payload: UserOpPayload) {
+  async getAllUserInfo(payload: UserOpPayload, getData: GetAllUser) {
     try {
       const response = await axios.post(
         `${this.baseURL}/getcustomer/`,
         {
-          page: 1,
+          page: getData.currentPage,
         },
         {
           headers: {

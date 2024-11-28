@@ -36,6 +36,10 @@ export interface DeleteSpecialOffer {
   specialOfferID: String;
 }
 
+interface GetSpecialOffer {
+  currentPage: number;
+}
+
 interface SpecialOfferPayload {
   token: string;
 }
@@ -47,12 +51,15 @@ export class SpecialOfferOperation {
     this.baseUrl = `${process.env.NEXT_PUBLIC_BACKEND_LOGIN_ENDPOINT!}/sales`;
   }
 
-  async getSpecialOffer(payload: SpecialOfferPayload) {
+  async getSpecialOffer(
+    payload: SpecialOfferPayload,
+    getData: GetSpecialOffer
+  ) {
     try {
       const response = await axios.post(
         `${this.baseUrl}/getspecialoffer/`,
         {
-          page: 1,
+          page: getData.currentPage,
         },
         {
           headers: {
