@@ -28,7 +28,7 @@ const SpecialOfferTable = ({
 }: TableProps) => {
   return (
     <Table
-      isPaginated={false}
+      isPaginated={true}
       selectType="multi"
       containerClassname="!rounded-lg p-4"
       fetchPageData={reloadData}

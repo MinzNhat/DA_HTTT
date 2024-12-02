@@ -68,9 +68,9 @@ const UsersMain = () => {
   const reloadData = useCallback(async () => {
     setData(null);
     const token = localStorage?.getItem("accessToken");
-    const response = await UserOp.getAllUserInfo({ token });
+    const response = await UserOp.getAllUserInfo({ token }, { currentPage });
     if (response.data) setData(response.data);
-  }, []);
+  }, [currentPage]);
 
   const openAdd = () => {
     setOpenUserDetail(false);

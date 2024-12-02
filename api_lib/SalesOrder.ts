@@ -59,6 +59,10 @@ export interface CreateSalesOrderInfo {
   Territory: number;
 }
 
+interface GetSalesOrder {
+  currentPage: number;
+}
+
 interface SalesOrderPayload {
   token: string;
 }
@@ -70,12 +74,12 @@ export class SalesOrderOperation {
     this.baseUrl = `${process.env.NEXT_PUBLIC_BACKEND_LOGIN_ENDPOINT!}/sales`;
   }
 
-  async getSpecialOffer(payload: SalesOrderPayload) {
+  async getSaleOrder(payload: SalesOrderPayload, getData: GetSalesOrder) {
     try {
       const response = await axios.post(
         `${this.baseUrl}/getsalesorder/`,
         {
-          page: 1,
+          page: getData.currentPage,
         },
         {
           headers: {

@@ -93,10 +93,13 @@ const SaleOrdersMain = () => {
     setData(null);
     const token = localStorage?.getItem("accessToken");
     console.log(token);
-    const response = await SalesOrderOp.getSpecialOffer({ token });
+    const response = await SalesOrderOp.getSaleOrder(
+      { token },
+      { currentPage }
+    );
     if (response.data) setData(response.data);
     console.log(response);
-  }, []);
+  }, [currentPage]);
 
   const openAdd = () => {
     setOpenSalesOrderDetail(false);
@@ -172,7 +175,9 @@ const SaleOrdersMain = () => {
     if (response.error) {
       setMessage("Đã có lỗi xảy ra, vui lòng thử lại sau");
     } else {
-      setMessage("Tạo thành công");
+      setMessage("Tạo sản phẩm thành công");
+      paginate(0);
+      reloadData();
     }
     setOpenNotification(true);
     setLoading(false);
@@ -213,11 +218,14 @@ const SaleOrdersMain = () => {
     return Math.abs(offset) * velocity;
   };
 
-  const handleChange = (id: keyof SalesOrderInfo, value: string) => {
+  const handleChange = (id: keyof SalesOrderInfo, value: string | number) => {
     setSalesOrderDetail((prev) => ({ ...prev, [id]: value }));
   };
 
-  const handleChange2 = (id: keyof CreateSalesOrderInfo, value: string) => {
+  const handleChange2 = (
+    id: keyof CreateSalesOrderInfo,
+    value: string | number
+  ) => {
     setSalesOrderData((prev) => ({ ...prev, [id]: value }));
   };
 

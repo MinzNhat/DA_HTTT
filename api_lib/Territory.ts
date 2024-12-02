@@ -7,6 +7,9 @@ export interface TerritoryInfo {
   SalesYTD: string;
   SalesLastYear: string;
 }
+interface GetTerritory {
+  currentPage: number;
+}
 
 interface TerritoryPayload {
   token: string;
@@ -19,12 +22,12 @@ export class TerritoryOperation {
     this.baseUrl = `${process.env.NEXT_PUBLIC_BACKEND_LOGIN_ENDPOINT!}/sales`;
   }
 
-  async getTerritory(payload: TerritoryPayload) {
+  async getTerritory(payload: TerritoryPayload, getData: GetTerritory) {
     try {
       const response = await axios.post(
         `${this.baseUrl}/getterritory/`,
         {
-          page: 1,
+          page: getData.currentPage,
         },
         {
           headers: {
