@@ -113,7 +113,7 @@ const TerritoryMain = () => {
 
     if (missingFields.length > 0) {
       setMessage(
-        `Vui lòng điền đầy đủ các thông tin sau: ${missingFields.join(", ")}`
+        `${intl.formatMessage({ id: "MissingMessage" })}: ${missingFields.join(", ")}`
       );
       setOpenNotification(true);
       return false;
@@ -131,21 +131,21 @@ const TerritoryMain = () => {
     important?: boolean;
     onChange?: (id: keyof TerritoryInfo, value: string) => void;
   }> = [
-    { id: "Name", type: "text", label: "Territory.Name", important: true },
-    { id: "Group", type: "text", label: "Territory.Group", important: true },
-    {
-      id: "SalesYTD",
-      type: "text",
-      label: "Territory.SalesYTD",
-      important: true,
-    },
-    {
-      id: "SalesLastYear",
-      type: "text",
-      label: "Territory.SalesLastYear",
-      important: true,
-    },
-  ];
+      { id: "Name", type: "text", label: "Territory.Name", important: true },
+      { id: "Group", type: "text", label: "Territory.Group", important: true },
+      {
+        id: "SalesYTD",
+        type: "text",
+        label: "Territory.SalesYTD",
+        important: true,
+      },
+      {
+        id: "SalesLastYear",
+        type: "text",
+        label: "Territory.SalesLastYear",
+        important: true,
+      },
+    ];
 
   const options = [
     {
@@ -197,17 +197,15 @@ const TerritoryMain = () => {
       <div className="sticky top-0 w-full flex gap-2 z-10 bg-white dark:bg-[#242526] h-12 min-h-12 px-2 justify-center place-items-center">
         <div className="gap-1 px-1 flex">
           <FaAngleLeft
-            className={`w-5 h-5 ${
-              page == 0 ? "text-gray-500 dark:text-darkContainerPrimary" : ""
-            }`}
+            className={`w-5 h-5 ${page == 0 ? "text-gray-500 dark:text-darkContainerPrimary" : ""
+              }`}
             onClick={() => {
               paginate(0);
             }}
           />
           <FaAngleRight
-            className={`w-5 h-5 ${
-              page == 1 ? "text-gray-500 dark:text-darkContainerPrimary" : ""
-            }`}
+            className={`w-5 h-5 ${page == 1 ? "text-gray-500 dark:text-darkContainerPrimary" : ""
+              }`}
             onClick={() => {
               paginate(1);
             }}
@@ -250,9 +248,8 @@ const TerritoryMain = () => {
                       paginate(Math.max(page - 1, 0));
                     }
                   }}
-                  className={`inset-0 flex flex-col gap-4 w-full h-full overflow-y-auto no-scrollbar place-items-center ${
-                    page === 1 ? "mb-2" : ""
-                  }`}
+                  className={`inset-0 flex flex-col gap-4 w-full h-full overflow-y-auto no-scrollbar place-items-center ${page === 1 ? "mb-2" : ""
+                    }`}
                 >
                   {indexoption.component}
                 </motion.div>

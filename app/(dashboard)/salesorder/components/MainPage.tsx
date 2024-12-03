@@ -98,7 +98,6 @@ const SaleOrdersMain = () => {
       { currentPage }
     );
     if (response.data) setData(response.data);
-    console.log(response);
   }, [currentPage]);
 
   const openAdd = () => {
@@ -114,10 +113,10 @@ const SaleOrdersMain = () => {
 
   const handleDelete = () => {
     if (selectedRows.length === 0) {
-      setMessage("Vui lòng chọn muốn xoá");
+      setMessage(intl.formatMessage({ id: "NoSelected" }));
       setOpenNotification(true);
     } else {
-      setMessage(`Xác nhận xoá ${selectedRows.length} đã chọn?`);
+      setMessage(`${intl.formatMessage({ id: "Delete1" })} ${selectedRows.length} ${intl.formatMessage({ id: "Delete2" })}?`);
       setOpenSubmitDelete(true);
     }
   };
@@ -145,9 +144,9 @@ const SaleOrdersMain = () => {
 
     setOpenSubmitDelete(false);
     if (hasError) {
-      setMessage("Đã có lỗi xảy ra trong quá trình ");
+      setMessage(intl.formatMessage({ id: "HandleFail" }));
     } else {
-      setMessage("Xóa thành công.");
+      setMessage(intl.formatMessage({ id: "DeleteSuccess" }));
     }
     reloadData();
     setSelectedRows([]);
@@ -173,9 +172,9 @@ const SaleOrdersMain = () => {
     );
 
     if (response.error) {
-      setMessage("Đã có lỗi xảy ra, vui lòng thử lại sau");
+      setMessage(intl.formatMessage({ id: "HandleFail" }));
     } else {
-      setMessage("Tạo sản phẩm thành công");
+      setMessage(intl.formatMessage({ id: "CreateSuccess" }));
       paginate(0);
       reloadData();
     }
@@ -195,9 +194,9 @@ const SaleOrdersMain = () => {
     );
 
     if (response.error) {
-      setMessage("Đã có lỗi xảy ra, vui lòng thử lại sau");
+      setMessage(intl.formatMessage({ id: "HandleFail" }));
     } else {
-      setMessage("Cập nhật thành công");
+      setMessage(intl.formatMessage({ id: "UpdateSuccess" }));
     }
     setOpenNotification(true);
     setLoading(false);
@@ -239,7 +238,7 @@ const SaleOrdersMain = () => {
 
     if (missingFields.length > 0) {
       setMessage(
-        `Vui lòng điền đầy đủ các thông tin sau: ${missingFields.join(", ")}`
+        `${intl.formatMessage({ id: "MissingMessage" })}: ${missingFields.join(", ")}`
       );
       setOpenNotification(true);
       return false;
@@ -260,19 +259,19 @@ const SaleOrdersMain = () => {
       value: string
     ) => void;
   }> = [
-    { id: "OrderDate", type: "text", label: "Order Date", important: true },
-    { id: "DueDate", type: "text", label: "Due Date", important: true },
-    { id: "ShipDate", type: "text", label: "Ship Date", important: true },
-    { id: "ShipMethod", type: "text", label: "Ship Method", important: true },
-    { id: "Comment", type: "text", label: "Comment", important: false },
-    { id: "SubTotal", type: "text", label: "Sub Total", important: true },
-    { id: "TaxAmt", type: "text", label: "Tax Amount", important: true },
-    { id: "Freight", type: "text", label: "Freight", important: true },
-    { id: "TotalDue", type: "text", label: "Total Due", important: true },
-    { id: "Employee", type: "number", label: "Employee ID", important: true },
-    { id: "Customer", type: "number", label: "Customer ID", important: true },
-    { id: "Territory", type: "number", label: "Territory ID", important: true },
-  ];
+      { id: "OrderDate", type: "text", label: "SalesOrder.OrderDate", important: true },
+      { id: "DueDate", type: "text", label: "SalesOrder.DueDate", important: true },
+      { id: "ShipDate", type: "text", label: "SalesOrder.ShipDate", important: true },
+      { id: "ShipMethod", type: "text", label: "SalesOrder.ShipMethod", important: true },
+      { id: "Comment", type: "text", label: "SalesOrder.Comment", important: false },
+      { id: "SubTotal", type: "text", label: "SalesOrder.SubTotal", important: true },
+      { id: "TaxAmt", type: "text", label: "SalesOrder.TaxAmt", important: true },
+      { id: "Freight", type: "text", label: "SalesOrder.Freight", important: true },
+      { id: "TotalDue", type: "text", label: "SalesOrder.TotalDue", important: true },
+      { id: "Employee", type: "number", label: "SalesOrder.Employee", important: true },
+      { id: "Customer", type: "number", label: "SalesOrder.Customer", important: true },
+      { id: "Territory", type: "number", label: "SalesOrder.Territory", important: true }
+    ];
 
   const options = [
     {
@@ -295,19 +294,13 @@ const SaleOrdersMain = () => {
       id: 1,
       component: (
         <div className="flex flex-col gap-4 w-full h-full md:w-1/2 p-4">
-          {openSalesOrderDetail ? (
+          {openSalesOrderDetail &&
             <SalesOrderFields
               data={salesOrderDetail}
               handleChange={handleChange}
               fields={salesorderFields}
             />
-          ) : (
-            <SalesOrderFields
-              data={salesOrderDetail}
-              handleChange={handleChange2}
-              fields={salesorderFields}
-            />
-          )}
+          }
         </div>
       ),
     },
@@ -334,17 +327,15 @@ const SaleOrdersMain = () => {
       <div className="sticky top-0 w-full flex gap-2 z-10 bg-white dark:bg-[#242526] h-12 min-h-12 px-2 justify-center place-items-center">
         <div className="gap-1 px-1 flex">
           <FaAngleLeft
-            className={`w-5 h-5 ${
-              page == 0 ? "text-gray-500 dark:text-darkContainerPrimary" : ""
-            }`}
+            className={`w-5 h-5 ${page == 0 ? "text-gray-500 dark:text-darkContainerPrimary" : ""
+              }`}
             onClick={() => {
               paginate(0);
             }}
           />
           <FaAngleRight
-            className={`w-5 h-5 ${
-              page == 1 ? "text-gray-500 dark:text-darkContainerPrimary" : ""
-            }`}
+            className={`w-5 h-5 ${page == 1 ? "text-gray-500 dark:text-darkContainerPrimary" : ""
+              }`}
             onClick={() => {
               paginate(1);
             }}
@@ -387,9 +378,8 @@ const SaleOrdersMain = () => {
                       paginate(Math.max(page - 1, 0));
                     }
                   }}
-                  className={`inset-0 flex flex-col gap-4 w-full h-full overflow-y-auto no-scrollbar place-items-center ${
-                    page === 1 ? "mb-2" : ""
-                  }`}
+                  className={`inset-0 flex flex-col gap-4 w-full h-full overflow-y-auto no-scrollbar place-items-center ${page === 1 ? "mb-2" : ""
+                    }`}
                 >
                   {indexoption.component}
                 </motion.div>
@@ -413,9 +403,9 @@ const SaleOrdersMain = () => {
             {loading ? (
               <LoadingUI />
             ) : openSalesOrderDetail ? (
-              "Chỉnh sửa"
+              intl.formatMessage({ id: "EditButton" })
             ) : (
-              "Xác nhận tạo"
+              intl.formatMessage({ id: "AddButtonConfirm" })
             )}
           </button>
         </motion.div>

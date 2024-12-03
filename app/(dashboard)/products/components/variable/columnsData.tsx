@@ -1,25 +1,26 @@
 import { ProductInfo } from "@/api_lib/Product";
 import { Column } from "react-table";
+import { IntlShape } from "react-intl";
 
-export const columnsData: Column<ProductInfo>[] = [
+export const createColumnsData = (intl: IntlShape): Column<ProductInfo>[] => [
     {
-        Header: "Tên sản phẩm",
+        Header: intl.formatMessage({ id: "Product.Name" }),
         accessor: "Name",
     },
     {
-        Header: "Nhà sản xuất",
+        Header: intl.formatMessage({ id: "Product.Manufacturer" }),
         accessor: "Manufacturer",
     },
     {
-        Header: "Giá sản xuất",
+        Header: intl.formatMessage({ id: "Product.ListPrice" }),
         accessor: "ListPrice",
     },
     {
-        Header: "Giá bán",
+        Header: intl.formatMessage({ id: "Product.StandardCost" }),
         accessor: "StandardCost",
     },
     {
-        Header: "Kích cỡ",
+        Header: intl.formatMessage({ id: "Product.Size" }),
         accessor: "Size",
     },
 ];

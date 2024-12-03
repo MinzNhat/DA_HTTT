@@ -79,7 +79,7 @@ export class ProductOperation {
         }
       );
 
-      return response.status === 202
+      return response.status >= 200 || response.status < 300
         ? { error: false, data: response.data.data as ProductInfo[] }
         : { error: true, data: null };
     } catch (err: any) {
@@ -105,7 +105,7 @@ export class ProductOperation {
         }
       );
 
-      return response.status === 202
+      return response.status >= 200 || response.status < 300
         ? { error: false, data: response.data as ProductInfo }
         : { error: true, data: null };
     } catch (err: any) {
@@ -127,7 +127,7 @@ export class ProductOperation {
         }
       );
 
-      return response.status === 202
+      return response.status >= 200 || response.status < 300
         ? { error: false, data: response.data as ProductInfo }
         : { error: true, data: null };
     } catch (err: any) {
@@ -153,7 +153,7 @@ export class ProductOperation {
         }
       );
 
-      return response.status === 202
+      return response.status >= 200 || response.status < 300
         ? { error: false, data: response.data as ProductInfo }
         : { error: true, data: null };
     } catch (err: any) {

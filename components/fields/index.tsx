@@ -7,6 +7,7 @@ import { customStyles } from "./styles/styles";
 import { useThemeContext } from "@/providers/ThemeProvider";
 import Select from "react-select";
 import { FormattedMessage } from "react-intl";
+import Switch from "../switch";
 
 type OptionType = {
   value: string;
@@ -104,29 +105,37 @@ const InputField: FC<Props> = ({
           </RenderCase>
 
           <div className={`relative w-full ${label ? "mt-1" : ""}`}>
-            <input
-              value={value}
-              onChange={(e) => {
-                setValue(e.target.value);
-              }}
-              onBlur={(e) => {
-                if (type === "date") setValue(e.target.value);
-              }}
-              disabled={disabled}
-              type={type === "password" && showPassword ? "text" : type}
-              id={id}
-              placeholder={type === "date" ? "" : placeholder}
-              className={`flex ${variant ? "h-10" : "h-12"
-                } w-full items-center justify-center rounded-xl border ${className ? className : "bg-white/0"
-                } p-3 text-sm outline-none duration-300 ${disabled
-                  ? "dark:border-none !bg-gray-100 dark:!bg-white/5 dark:placeholder:!text-[rgba(255,255,255,0.15)]"
-                  : state === "error"
-                    ? "border-red-500 dark:!border-2 text-red-500 placeholder:text-red-500 dark:!border-red-400 dark:!text-red-400 dark:placeholder:!text-red-400"
-                    : state === "success"
-                      ? "border-green-500 text-green-500 placeholder:text-green-500 dark:!border-green-400 dark:!text-green-400 dark:placeholder:!text-green-400"
-                      : "border-gray-200 dark:border-white/10 focus:border-blueSecondary dark:focus:border-blueSecondary dark:text-white "
-                } ${type === "date" ? "hide-calendar-icon" : ""}`}
-            />
+            <RenderCase renderIf={type !== "checkbox"}>
+              <input
+                value={value}
+                onChange={(e) => {
+                  setValue(e.target.value);
+                }}
+                onBlur={(e) => {
+                  if (type === "date") setValue(e.target.value);
+                }}
+                disabled={disabled}
+                type={type === "password" && showPassword ? "text" : type}
+                id={id}
+                placeholder={type === "date" ? "" : placeholder}
+                className={`flex ${variant ? "h-10" : "h-12"
+                  } w-full items-center justify-center rounded-xl border ${className ? className : "bg-white/0"
+                  } p-3 text-sm outline-none duration-300 ${disabled
+                    ? "dark:border-none !bg-gray-100 dark:!bg-white/5 dark:placeholder:!text-[rgba(255,255,255,0.15)]"
+                    : state === "error"
+                      ? "border-red-500 dark:!border-2 text-red-500 placeholder:text-red-500 dark:!border-red-400 dark:!text-red-400 dark:placeholder:!text-red-400"
+                      : state === "success"
+                        ? "border-green-500 text-green-500 placeholder:text-green-500 dark:!border-green-400 dark:!text-green-400 dark:placeholder:!text-green-400"
+                        : "border-gray-200 dark:border-white/10 focus:border-blueSecondary dark:focus:border-blueSecondary dark:text-white "
+                  } ${type === "date" ? "hide-calendar-icon" : ""}`}
+              />
+            </RenderCase>
+
+            <RenderCase renderIf={type === "checkbox"}>
+              <div className="flex justify-center w-full">
+                <Switch checked={value} onChange={setValue} />
+              </div>
+            </RenderCase>
 
             <RenderCase renderIf={type == "password"}>
               <button

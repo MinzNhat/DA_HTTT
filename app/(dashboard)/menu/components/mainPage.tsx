@@ -8,8 +8,10 @@ import { useState, useEffect } from "react";
 import RenderCase from "@/components/rendercase";
 import { useSearchContext } from "@/providers/SearchProvider";
 import { useOpenAppDataContext } from "@/providers/OpenAppProvider";
+import { FormattedMessage, useIntl } from "react-intl";
 
 const MenuList = () => {
+    const intl = useIntl();
     const { search } = useSearchContext();
     const { setOpenApp } = useOpenAppDataContext();
     const [debouncedSearch, setDebouncedSearch] = useState<string>("");
@@ -44,7 +46,7 @@ const MenuList = () => {
     return (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 w-full">
             {apps
-                .filter(app => app.name.toLowerCase().includes(debouncedSearch.toLowerCase()))
+                .filter(app => intl.formatMessage({ id: `app.${app.name.toLowerCase().replace(' ', '')}` }).toLowerCase().includes(debouncedSearch.toLowerCase()))
                 .map((app, index) => (
                     <motion.div
                         key={app.id}
@@ -69,7 +71,7 @@ const MenuList = () => {
                             <RenderCase renderIf={app.name !== "Music"}>
                                 <>
                                     <app.icon className="text-4xl lg:text-6xl mb-2 dark:text-white text-blue-700 h-full pt-10 min-h-6 min-w-6" />
-                                    <span className="text-md font-semibold mb-2 dark:text-white text-blue-700 justify-self-end h-10">{app.name}</span>
+                                    <span className="text-md font-semibold mb-2 dark:text-white text-blue-700 justify-self-end h-10"><FormattedMessage id={`app.${app.name.toLowerCase().replace(' ', '')}`} /></span>
                                 </>
                             </RenderCase>
                         </div>

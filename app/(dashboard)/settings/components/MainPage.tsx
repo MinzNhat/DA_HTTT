@@ -8,12 +8,13 @@ import { IoIosAdd, IoIosBrowsers } from "react-icons/io";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import RenderCase from "@/components/rendercase";
 import SettingAccount from "./SettingAccount";
-import { useIntl } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import { useThemeContext } from "@/providers/ThemeProvider";
 import NotiPopup from "@/components/notification";
 import SubmitPopup from "@/components/submit";
 import { UpdateUserInfo, UserOperation } from "@/api_lib/User";
 import SettingTheme from "./SettingTheme";
+import LanguageSwitcher from "@/components/language";
 
 const SettingsMain = () => {
   const intl = useIntl();
@@ -93,18 +94,18 @@ const SettingsMain = () => {
     };
 
     if (!hasChanges()) {
-      setMessage("Vui lòng chỉnh sửa thông tin muốn cập nhật");
+      setMessage(intl.formatMessage({ id: "Settings.message1" }));
       setOpenNotification(true);
       return;
     } else if (
       data.PhoneNumber != passData.PhoneNumber &&
       !phoneNumberRegex.test(data.PhoneNumber)
     ) {
-      setMessage("Vui lòng nhập đúng định dạng số điện thoại");
+      setMessage(intl.formatMessage({ id: "Settings.message2" }));
       setOpenNotification(true);
       return;
     } else {
-      setMessage("Xác nhận cập nhật thông tin?");
+      setMessage(intl.formatMessage({ id: "Settings.message3" }));
       setOpenSubmitNotification(true);
     }
   };
@@ -138,10 +139,10 @@ const SettingsMain = () => {
 
     setOpenSubmitNotification(false);
     if (response.error) {
-      setMessage("Đã có lỗi xảy ra, vui lòng thử lại sau");
+      setMessage(intl.formatMessage({ id: "Settings.message4" }));
       setOpenNotification(true);
     } else {
-      setMessage("Cập nhật thông tin cá nhân thành công");
+      setMessage(intl.formatMessage({ id: "Settings.message5" }));
       setPassData(data);
       setOpenNotification(true);
     }
@@ -155,54 +156,54 @@ const SettingsMain = () => {
     important?: boolean;
     onChange?: (id: keyof UserInfo, value: string) => void;
   }> = [
-    { id: "name", type: "text", label: "Settings.Fullname", important: false },
-    {
-      id: "PhoneNumber",
-      type: "text",
-      label: "Settings.PhoneNumber",
-      important: false,
-      onChange: handleNumberChange,
-    },
-    {
-      id: "email",
-      type: "text",
-      label: "Settings.Email",
-      disable: true,
-      important: true,
-    },
-    {
-      id: "AddressLine1",
-      type: "text",
-      label: "Settings.AddressLine1",
-      important: false,
-    },
-    {
-      id: "AddressLine2",
-      type: "text",
-      label: "Settings.AddressLine2",
-      important: false,
-    },
-    { id: "City", type: "text", label: "Settings.City", important: false },
-    {
-      id: "CountryRegionName",
-      type: "text",
-      label: "Settings.CountryRegionName",
-      important: false,
-    },
-    {
-      id: "JobTitle",
-      type: "text",
-      label: "Settings.JobTitle",
-      important: false,
-    },
-    {
-      id: "isManager",
-      type: "text",
-      label: "Settings.isManager",
-      disable: true,
-      important: true,
-    },
-  ];
+      { id: "name", type: "text", label: "Settings.Fullname", important: false },
+      {
+        id: "PhoneNumber",
+        type: "text",
+        label: "Settings.PhoneNumber",
+        important: false,
+        onChange: handleNumberChange,
+      },
+      {
+        id: "email",
+        type: "text",
+        label: "Settings.Email",
+        disable: true,
+        important: true,
+      },
+      {
+        id: "AddressLine1",
+        type: "text",
+        label: "Settings.AddressLine1",
+        important: false,
+      },
+      {
+        id: "AddressLine2",
+        type: "text",
+        label: "Settings.AddressLine2",
+        important: false,
+      },
+      { id: "City", type: "text", label: "Settings.City", important: false },
+      {
+        id: "CountryRegionName",
+        type: "text",
+        label: "Settings.CountryRegionName",
+        important: false,
+      },
+      {
+        id: "JobTitle",
+        type: "text",
+        label: "Settings.JobTitle",
+        important: false,
+      },
+      {
+        id: "isManager",
+        type: "text",
+        label: "Settings.isManager",
+        disable: true,
+        important: true,
+      },
+    ];
 
   const options = [
     {
@@ -228,7 +229,13 @@ const SettingsMain = () => {
         </div>
       ),
     },
-    { id: 2, component: <div className="w-full h-full" /> },
+    {
+      id: 2, component: (
+        <div className="flex flex-col gap-4 w-full h-full place-items-center justify-center">
+          <LanguageSwitcher version="2" />
+        </div>
+      )
+    },
   ];
 
   const swipeConfidenceThreshold = 2;
@@ -265,34 +272,31 @@ const SettingsMain = () => {
 
         <div className="dark:bg-[#3A3B3C] bg-lightPrimary rounded-md sm:rounded-full flex w-full overflow-clip relative">
           <Button
-            className={`w-full flex flex-row h-9 bg-lightPrimary dark:bg-darkContainerPrimary rounded-none ${
-              page === 0
-                ? "text-blue-500 font-semibold "
-                : "text-black dark:text-white font-sans"
-            }`}
+            className={`w-full flex flex-row h-9 bg-lightPrimary dark:bg-darkContainerPrimary rounded-none ${page === 0
+              ? "text-blue-500 font-semibold "
+              : "text-black dark:text-white font-sans"
+              }`}
             onClick={() => paginate(0)}
           >
-            <span className="text-sm sm:md">Tài khoản</span>
+            <span className="text-sm sm:md"><FormattedMessage id="Settings.button2" /></span>
           </Button>
           <Button
-            className={`w-full flex flex-row h-9 bg-lightPrimary dark:bg-darkContainerPrimary rounded-none ${
-              page === 1
-                ? "text-blue-500 font-semibold "
-                : "text-black dark:text-white font-sans"
-            }`}
+            className={`w-full flex flex-row h-9 bg-lightPrimary dark:bg-darkContainerPrimary rounded-none ${page === 1
+              ? "text-blue-500 font-semibold "
+              : "text-black dark:text-white font-sans"
+              }`}
             onClick={() => paginate(1)}
           >
-            <span className="text-sm sm:md">Nền hệ thống</span>
+            <span className="text-sm sm:md"><FormattedMessage id="Settings.button3" /></span>
           </Button>
           <Button
-            className={`w-full flex flex-row h-9 bg-lightPrimary dark:bg-darkContainerPrimary rounded-none ${
-              page === 2
-                ? "text-blue-500 font-semibold "
-                : "text-black dark:text-white font-sans"
-            }`}
+            className={`w-full flex flex-row h-9 bg-lightPrimary dark:bg-darkContainerPrimary rounded-none ${page === 2
+              ? "text-blue-500 font-semibold "
+              : "text-black dark:text-white font-sans"
+              }`}
             onClick={() => paginate(2)}
           >
-            <span className="text-sm sm:md">Ngôn ngữ</span>
+            <span className="text-sm sm:md"><FormattedMessage id="Settings.button4" /></span>
           </Button>
           <motion.div
             className={`w-1/3 bg-blue-500 -bottom-[1px] h-[2px] absolute`}
@@ -363,7 +367,7 @@ const SettingsMain = () => {
             onClick={submit}
             className="linear w-full !rounded-md bg-brand-500 py-[10px] text-base font-medium text-white transition duration-200 hover:bg-brand-600 active:bg-brand-700 dark:text-white dark:hover:bg-brand-300 dark:active:bg-brand-200"
           >
-            Cập nhật
+            <FormattedMessage id="Settings.button" />
           </button>
         </motion.div>
       </RenderCase>

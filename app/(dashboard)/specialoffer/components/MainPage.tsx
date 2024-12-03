@@ -101,10 +101,10 @@ const SpecialOfferMain = () => {
 
   const handleDelete = () => {
     if (selectedRows.length === 0) {
-      setMessage("Vui lòng chọn sản phẩm muốn xoá");
+      setMessage(intl.formatMessage({ id: "NoSelected" }));
       setOpenNotification(true);
     } else {
-      setMessage(`Xác nhận xoá ${selectedRows.length} sản phẩm đã chọn?`);
+      setMessage(`${intl.formatMessage({ id: "Delete1" })} ${selectedRows.length} ${intl.formatMessage({ id: "Delete2" })}?`);
       setOpenSubmitDelete(true);
     }
   };
@@ -132,9 +132,9 @@ const SpecialOfferMain = () => {
 
     setOpenSubmitDelete(false);
     if (hasError) {
-      setMessage("Đã có lỗi xảy ra trong quá trình xóa 1 số sản phẩm");
+      setMessage(intl.formatMessage({ id: "HandleFail" }));
     } else {
-      setMessage("Xóa sản phẩm thành công.");
+      setMessage(intl.formatMessage({ id: "DeleteSuccess" }));
     }
     reloadData();
     setSelectedRows([]);
@@ -160,9 +160,11 @@ const SpecialOfferMain = () => {
     );
 
     if (response.error) {
-      setMessage("Đã có lỗi xảy ra, vui lòng thử lại sau");
+      setMessage(intl.formatMessage({ id: "HandleFail" }));
     } else {
-      setMessage("Tạo thành công");
+      setMessage(intl.formatMessage({ id: "CreateSuccess" }));
+      paginate(0);
+      reloadData();
     }
     setOpenNotification(true);
     setLoading(false);
@@ -180,9 +182,9 @@ const SpecialOfferMain = () => {
     );
 
     if (response.error) {
-      setMessage("Đã có lỗi xảy ra, vui lòng thử lại sau");
+      setMessage(intl.formatMessage({ id: "HandleFail" }));
     } else {
-      setMessage("Cập nhật thành công");
+      setMessage(intl.formatMessage({ id: "UpdateSuccess" }));
     }
     setOpenNotification(true);
     setLoading(false);
@@ -221,7 +223,7 @@ const SpecialOfferMain = () => {
 
     if (missingFields.length > 0) {
       setMessage(
-        `Vui lòng điền đầy đủ các thông tin sau: ${missingFields.join(", ")}`
+        `${intl.formatMessage({ id: "MissingMessage" })}: ${missingFields.join(", ")}`
       );
       setOpenNotification(true);
       return false;
@@ -242,19 +244,19 @@ const SpecialOfferMain = () => {
       value: string
     ) => void;
   }> = [
-    { id: "Description", type: "text", label: "Description", important: true },
-    {
-      id: "DiscountPct",
-      type: "text",
-      label: "Discount Percentage",
-      important: true,
-    },
-    { id: "Type", type: "text", label: "Type", important: true },
-    { id: "StartDate", type: "text", label: "Start Date", important: true },
-    { id: "EndDate", type: "text", label: "End Date", important: true },
-    { id: "MinQty", type: "text", label: "Min Quantity", important: true },
-    { id: "MaxQty", type: "text", label: "Max Quantity", important: true },
-  ];
+      { id: "Description", type: "text", label: "Description", important: true },
+      {
+        id: "DiscountPct",
+        type: "text",
+        label: "Discount Percentage",
+        important: true,
+      },
+      { id: "Type", type: "text", label: "Type", important: true },
+      { id: "StartDate", type: "text", label: "Start Date", important: true },
+      { id: "EndDate", type: "text", label: "End Date", important: true },
+      { id: "MinQty", type: "text", label: "Min Quantity", important: true },
+      { id: "MaxQty", type: "text", label: "Max Quantity", important: true },
+    ];
 
   const options = [
     {
@@ -329,17 +331,15 @@ const SpecialOfferMain = () => {
       <div className="sticky top-0 w-full flex gap-2 z-10 bg-white dark:bg-[#242526] h-12 min-h-12 px-2 justify-center place-items-center">
         <div className="gap-1 px-1 flex">
           <FaAngleLeft
-            className={`w-5 h-5 ${
-              page == 0 ? "text-gray-500 dark:text-darkContainerPrimary" : ""
-            }`}
+            className={`w-5 h-5 ${page == 0 ? "text-gray-500 dark:text-darkContainerPrimary" : ""
+              }`}
             onClick={() => {
               paginate(0);
             }}
           />
           <FaAngleRight
-            className={`w-5 h-5 ${
-              page == 1 ? "text-gray-500 dark:text-darkContainerPrimary" : ""
-            }`}
+            className={`w-5 h-5 ${page == 1 ? "text-gray-500 dark:text-darkContainerPrimary" : ""
+              }`}
             onClick={() => {
               paginate(1);
             }}
@@ -382,9 +382,8 @@ const SpecialOfferMain = () => {
                       paginate(Math.max(page - 1, 0));
                     }
                   }}
-                  className={`inset-0 flex flex-col gap-4 w-full h-full overflow-y-auto no-scrollbar place-items-center ${
-                    page === 1 ? "mb-2" : ""
-                  }`}
+                  className={`inset-0 flex flex-col gap-4 w-full h-full overflow-y-auto no-scrollbar place-items-center ${page === 1 ? "mb-2" : ""
+                    }`}
                 >
                   {indexoption.component}
                 </motion.div>
@@ -408,9 +407,9 @@ const SpecialOfferMain = () => {
             {loading ? (
               <LoadingUI />
             ) : openSpecialOfferDetail ? (
-              "Chỉnh sửa"
+              intl.formatMessage({ id: "EditButton" })
             ) : (
-              "Xác nhận tạo"
+              intl.formatMessage({ id: "AddButtonConfirm" })
             )}
           </button>
         </motion.div>

@@ -5,6 +5,7 @@ import axios from 'axios';
 
 import RenderCase from '@/components/rendercase';
 import NotiPopup from '@/components/notification';
+import { useIntl } from 'react-intl';
 
 interface UserAuthContextInterface {
     accessToken: string | null;
@@ -52,7 +53,7 @@ type Props = {
 
 export const UserAuthProvider = ({ children }: Props) => {
     const router = useRouter();
-
+    const intl = useIntl();
     const [message, setMessage] = useState<string>("")
     const [openNotification, setOpenNotification] = useState<boolean>(false)
     const [accessToken, setAccessToken] = useState<string | null>(typeof window !== "undefined" ? localStorage?.getItem('accessToken') : null);
@@ -76,7 +77,7 @@ export const UserAuthProvider = ({ children }: Props) => {
                 { headers: { 'Content-Type': 'application/json' } }
             );
 
-            if (response.status === 200) {
+            if (response.status >= 200 || response.status < 300) {
                 setAccessToken(response.data.access);
                 setRefreshToken(response.data.refresh);
                 localStorage.setItem('accessToken', response.data.access);
@@ -129,7 +130,7 @@ export const UserAuthProvider = ({ children }: Props) => {
                 { headers: { 'Content-Type': 'application/json' } }
             );
 
-            if (response.status === 201) {
+            if (response.status >= 200 || response.status < 300) {
                 error = false
             } else {
                 error = true
@@ -159,7 +160,7 @@ export const UserAuthProvider = ({ children }: Props) => {
                 { headers: { 'Content-Type': 'application/json' } }
             );
 
-            if (response.status === 204) {
+            if (response.status >= 200 || response.status < 300) {
                 error = false
             } else {
                 error = true
@@ -190,7 +191,7 @@ export const UserAuthProvider = ({ children }: Props) => {
 
             console.log(response)
 
-            if (response.status === 204) {
+            if (response.status >= 200 || response.status < 300) {
                 error = false
             } else {
                 error = true
@@ -221,7 +222,7 @@ export const UserAuthProvider = ({ children }: Props) => {
                 { headers: { 'Content-Type': 'application/json' } }
             );
 
-            if (response.status === 204) {
+            if (response.status >= 200 || response.status < 300) {
                 error = false
             } else {
                 error = true
@@ -237,7 +238,7 @@ export const UserAuthProvider = ({ children }: Props) => {
 
     useEffect(() => {
         if (sessionExpireTime && Date.now() >= sessionExpireTime) {
-            setMessage("Đã hết phiên đăng nhập, vui lòng đăng nhập lại")
+            setMessage(intl.formatMessage({ id: "Auth.message" }))
             setOpenNotification(true)
         }
     }, [sessionExpireTime]);

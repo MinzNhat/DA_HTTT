@@ -56,7 +56,7 @@ export class SpecialOfferProductrOperation {
         },
       });
 
-      return response.status === 200
+      return response.status >= 200 || response.status < 300
         ? { error: false, data: response.data as SpecialOfferInfo }
         : { error: true, data: null };
     } catch (err: any) {
@@ -80,7 +80,7 @@ export class SpecialOfferProductrOperation {
         }
       );
 
-      return response.status === 202
+      return response.status >= 200 || response.status < 300
         ? { error: false, data: response.data as SpecialOfferInfo }
         : { error: true, data: null };
     } catch (err: any) {
@@ -104,7 +104,7 @@ export class SpecialOfferProductrOperation {
         }
       );
 
-      return response.status === 202
+      return response.status >= 200 || response.status < 300
         ? { error: false, data: response.data as SpecialOfferInfo }
         : { error: true, data: null };
     } catch (err: any) {

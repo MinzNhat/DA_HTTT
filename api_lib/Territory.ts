@@ -37,7 +37,7 @@ export class TerritoryOperation {
         }
       );
 
-      return response.status === 202
+      return response.status >= 200 || response.status < 300
         ? { error: false, data: response.data.data as TerritoryInfo[] }
         : { error: true, data: null };
     } catch (err: any) {

@@ -1,5 +1,6 @@
 import { useThemeContext } from "@/providers/ThemeProvider";
 import Image from "next/image";
+import { FormattedMessage } from "react-intl";
 
 const SettingTheme = () => {
     const { theme, setTheme } = useThemeContext();
@@ -19,7 +20,7 @@ const SettingTheme = () => {
                     objectFit="contain"
                     className={`rounded-md  ${theme === "light" ? "border-[3px] border-blue-500" : ""}`}
                 />
-                <span className="text-base text-center">Light</span>
+                <span className="text-base text-center"><FormattedMessage id="light" /></span>
             </div>
             <div
                 onClick={() => setTheme("dark")}
@@ -34,7 +35,7 @@ const SettingTheme = () => {
                     objectFit="contain"
                     className={`rounded-md  ${theme === "dark" ? "border-[3px] border-blue-500" : ""}`}
                 />
-                <span className="text-base text-center">Dark</span>
+                <span className="text-base text-center"><FormattedMessage id="dark" /></span>
             </div>
         </div>
     );

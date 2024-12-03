@@ -1,25 +1,22 @@
 import { TerritoryInfo } from "@/api_lib/Territory";
 import { Column } from "react-table";
+import { IntlShape } from "react-intl";
 
-export const columnsData: Column<TerritoryInfo>[] = [
+export const createColumnsData = (intl: IntlShape): Column<TerritoryInfo>[] => [
   {
-    Header: "Mã số",
-    accessor: "id",
-  },
-  {
-    Header: "Tên",
+    Header: intl.formatMessage({ id: "Territory.Name" }),
     accessor: "Name",
   },
   {
-    Header: "Nhóm",
+    Header: intl.formatMessage({ id: "Territory.Group" }),
     accessor: "Group",
   },
   {
-    Header: "SalesYTD",
+    Header: intl.formatMessage({ id: "Territory.SalesYTD" }),
     accessor: "SalesYTD",
   },
   {
-    Header: "SalesLastYear",
+    Header: intl.formatMessage({ id: "Territory.SalesLastYear" }),
     accessor: "SalesLastYear",
   },
 ];

@@ -17,8 +17,10 @@ import { MdNavigateBefore, MdNavigateNext, MdRadioButtonChecked, MdRadioButtonUn
 import { SetTableSizeProps, TableData, TableProps } from "./types/table-config";
 import Card from "../card";
 import RenderCase from "../rendercase";
+import { FormattedMessage, useIntl } from "react-intl";
 
 const CheckTableV1 = <T extends TableData>(props: TableProps<T>) => {
+    const intl = useIntl();
     const {
         columnsData, tableData, selectedRows, setSelectedRows, primaryKey, currentPage, currentSize, isPaginated = false, fetchPageData,
         customButton, containerClassname, customNoData, maxPage, onRowClick, renderCell, renderHeader, selectType = 'multi', setCurrentPage, setPageSize,
@@ -154,7 +156,7 @@ const CheckTableV1 = <T extends TableData>(props: TableProps<T>) => {
                             setGlobalFilter(e.target.value);
                         }}
                         type="text"
-                        placeholder="Tìm kiếm..."
+                        placeholder={intl.formatMessage({ id: "Search.Placeholder" })}
                         className="block h-full w-full rounded-full bg-lightPrimary text-sm font-medium text-navy-800 dark:text-white
                         placeholder:text-navy-800 placeholder:dark:text-gray-300 outline-none dark:bg-darkContainerPrimary pl-1 pr-3"
                     />
@@ -243,7 +245,7 @@ const CheckTableV1 = <T extends TableData>(props: TableProps<T>) => {
                                                 return (
                                                     <td {...cellProps} key={key} className="pt-[14px] pb-[16px] sm:text-[14px] pr-6">
                                                         <p className="h-full w-full">
-                                                            {(renderCell && cell.column.Header ? renderCell(cell.column.Header?.toString(), cell.value, row.original, index, isSelected) : null) || cell.value || 'Không có thông tin'}
+                                                            {(renderCell && cell.column.Header ? renderCell(cell.column.Header?.toString(), cell.value, row.original, index, isSelected) : null) || cell.value || <FormattedMessage id="Table.Nodata" />}
                                                         </p>
                                                     </td>
                                                 );

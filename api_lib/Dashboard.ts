@@ -20,11 +20,9 @@ export interface TopProduct {
 }
 
 export interface TopTerritory {
-  territory_id: number;
-  territory_name: string;
+  name: string;
   revenue: number;
   cost: number;
-  profit: number;
 }
 
 interface DashboardPayload {
@@ -48,7 +46,7 @@ export class DashboardOperation {
         },
       });
 
-      return response.status === 200
+      return response.status >= 200 || response.status < 300
         ? { error: false, data: response.data as OverviewProgression[] }
         : { error: true, data: null };
     } catch (err: any) {
@@ -66,7 +64,7 @@ export class DashboardOperation {
         },
       });
 
-      return response.status === 200
+      return response.status >= 200 || response.status < 300
         ? { error: false, data: response.data as OverviewStats }
         : { error: true, data: null };
     } catch (err: any) {
@@ -84,7 +82,7 @@ export class DashboardOperation {
         },
       });
 
-      return response.status === 200
+      return response.status >= 200 || response.status < 300
         ? { error: false, data: response.data as TopProduct[] }
         : { error: true, data: null };
     } catch (err: any) {
@@ -102,7 +100,7 @@ export class DashboardOperation {
         },
       });
 
-      return response.status === 200
+      return response.status >= 200 || response.status < 300
         ? { error: false, data: response.data as TopTerritory[] }
         : { error: true, data: null };
     } catch (err: any) {

@@ -8,6 +8,7 @@ import {
   MdOutlineAddCircleOutline,
   MdOutlineRemoveCircleOutline,
 } from "react-icons/md";
+import { FormattedMessage } from "react-intl";
 
 interface CustomButtonProps {
   fetchData: () => void;
@@ -28,7 +29,8 @@ const CustomButton = ({
         onClick={fetchData}
       >
         <MdRestartAlt />
-        Tải lại
+        <FormattedMessage id="ReloadButton" />
+
       </Button>
       <Button
         className={`col-span-1 w-full lg:w-fit flex items-center text-md hover:cursor-pointer bg-lightPrimary p-2 hover:bg-gray-100 dark:bg-[#3A3B3C] dark:hover:bg-white/20 dark:active:bg-white/10
@@ -37,7 +39,7 @@ const CustomButton = ({
       >
         <MdOutlineAddCircleOutline />
         <p className="flex gap-1">
-          Thêm <p className="hidden sm:block">sản phẩm</p>
+          <FormattedMessage id="AddButton" />
         </p>
       </Button>
     </div>

@@ -11,6 +11,7 @@ import { Button } from "@nextui-org/react";
 import TooltipHorizon from "../tooltip";
 import { useThemeContext } from "@/providers/ThemeProvider";
 import { FaUser } from "react-icons/fa";
+import { FormattedMessage, useIntl } from "react-intl";
 
 interface Props {
     openApp: boolean,
@@ -18,6 +19,7 @@ interface Props {
 }
 
 const Taskbar: FC<Props> = ({ openApp, isVisible }) => {
+    const intl = useIntl();
     const { setOpenApp } = useOpenAppDataContext();
     const [isSearchFocused, setIsSearchFocused] = useState(false);
     const { search, setSearch } = useSearchContext();
@@ -84,7 +86,7 @@ const Taskbar: FC<Props> = ({ openApp, isVisible }) => {
                                     value={search}
                                     onChange={(e) => setSearch(e.target.value)}
                                     type="text"
-                                    placeholder={"Tìm kiếm..."}
+                                    placeholder={intl.formatMessage({ id: "Search.Placeholder" })}
                                     className={`block h-full w-full text-sm bg-white/40 font-medium text-blue-700 outline-none 
                                     placeholder:!text-blue-700 dark:bg-[#3a3b3c] dark:text-white dark:placeholder:!text-white transition-all duration-500 ${isSearchFocused ? "pl-4" : "pl-10"
                                         }`}
@@ -98,7 +100,7 @@ const Taskbar: FC<Props> = ({ openApp, isVisible }) => {
                     </RenderCase>
                     <div className="pl-1.5 border-l-[0.5px] border-white/50">
                         <TooltipHorizon
-                            content={<div className="dark:text-white text-blue-700 font-semibold">Cài đặt tài khoản</div>} extra={`${openApp ? "bg-white dark:bg-[#242526]" : "bg-white/60 dark:bg-[#242526]/50"}`}>
+                            content={<div className="dark:text-white text-blue-700 font-semibold"><FormattedMessage id="Settings.button2" /></div>} extra={`${openApp ? "bg-white dark:bg-[#242526]" : "bg-white/60 dark:bg-[#242526]/50"}`}>
                             <Button
                                 onClick={() => setOpenApp({ openApp: true, appName: "settings" })}
                                 className="avatar min-w-9 min-h-9 h-9 hover:scale-110 hover:-translate-y-1 w-9 rounded-full flex justify-center transition-all duration-300">

@@ -1,7 +1,8 @@
 import Table from "@/components/table";
 import { SalesOrderInfo } from "@/api_lib/SalesOrder";
-import { columnsData } from "./variable/columnsData";
+import { createColumnsData } from "./variable/columnsData";
 import CustomButton from "./CustomTableButton";
+import { useIntl } from "react-intl";
 
 type TableProps = {
   reloadData: () => void;
@@ -26,6 +27,7 @@ const ProductTable = ({
   openAdd,
   handleDelete,
 }: TableProps) => {
+  const intl = useIntl();
   return (
     <Table
       isPaginated={true}
@@ -33,7 +35,7 @@ const ProductTable = ({
       containerClassname="!rounded-lg p-4"
       fetchPageData={reloadData}
       tableData={tableData}
-      columnsData={columnsData}
+      columnsData={createColumnsData(intl)}
       currentPage={currentPage}
       setCurrentPage={setCurrentPage}
       currentSize={10}

@@ -1,21 +1,22 @@
-import { ProductInfo } from "@/api_lib/Product";
+import { SalesOrderInfo } from "@/api_lib/SalesOrder";
 import { Column } from "react-table";
+import { IntlShape } from "react-intl";
 
-export const columnsData: Column<ProductInfo>[] = [
+export const createColumnsData = (intl: IntlShape): Column<SalesOrderInfo>[] => [
   {
-    Header: "Ngày đặt hàng",
+    Header: intl.formatMessage({ id: "SalesOrder.OrderDate" }),
     accessor: "OrderDate",
   },
   {
-    Header: "Ngày nhận hàng (dự kiến)",
+    Header: intl.formatMessage({ id: "SalesOrder.DueDate" }),
     accessor: "DueDate",
   },
   {
-    Header: "Số tiền thanh toán",
+    Header: intl.formatMessage({ id: "SalesOrder.TotalDue" }),
     accessor: "TotalDue",
   },
   {
-    Header: "Bình luận",
+    Header: intl.formatMessage({ id: "SalesOrder.Comment" }),
     accessor: "Comment",
   },
 ];

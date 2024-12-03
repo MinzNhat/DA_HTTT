@@ -1,7 +1,8 @@
 import Table from "@/components/table";
 import { TerritoryInfo } from "@/api_lib/Territory";
-import { columnsData } from "./variable/columnsData";
+import { createColumnsData } from "./variable/columnsData";
 import CustomButton from "./CustomTableButton";
+import { useIntl } from "react-intl";
 
 type TableProps = {
   reloadData: () => void;
@@ -24,6 +25,7 @@ const TerritoryTable = ({
   onRowClick,
   openAdd,
 }: TableProps) => {
+  const intl = useIntl();
   return (
     <Table
       isPaginated={true}
@@ -31,7 +33,7 @@ const TerritoryTable = ({
       containerClassname="!rounded-lg p-4"
       fetchPageData={reloadData}
       tableData={tableData}
-      columnsData={columnsData}
+      columnsData={createColumnsData(intl)}
       currentPage={currentPage}
       setCurrentPage={setCurrentPage}
       currentSize={10}

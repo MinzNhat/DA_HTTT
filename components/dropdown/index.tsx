@@ -57,7 +57,7 @@ const Dropdown = ({
     }
   };
 
-  useHandleClickOutsideAlerter({ ref: wrapperRef, setState: setOpenWrapper });
+  useHandleClickOutsideAlerter({ ref: [wrapperRef, dropdownRef], setState: setOpenWrapper });
 
   const setDropdownPosition = () => {
     if (buttonRef.current) {
@@ -95,7 +95,7 @@ const Dropdown = ({
   const debouncedSetDropdownPosition = debounce(setDropdownPosition, 100);
 
   useEffect(() => {
-    setIsBrowser(true); // Set this to true after the component mounts
+    setIsBrowser(true);
 
     debouncedSetDropdownPosition();
 
@@ -130,7 +130,7 @@ const Dropdown = ({
             position: 'fixed',
             top: dropdownPositionState.top,
             left: dropdownPositionState.left,
-            zIndex: 1000,
+            zIndex: 45,
           }}
         >
           <div className='relative w-full'>

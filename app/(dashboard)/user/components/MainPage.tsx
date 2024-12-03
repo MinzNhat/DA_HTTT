@@ -85,10 +85,10 @@ const UsersMain = () => {
 
   const handleDelete = () => {
     if (selectedRows.length === 0) {
-      setMessage("Vui lòng chọn người dùng muốn xoá");
+      setMessage(intl.formatMessage({ id: "NoSelected" }));
       setOpenNotification(true);
     } else {
-      setMessage(`Xác nhận xoá ${selectedRows.length} người dùng đã chọn?`);
+      setMessage(`${intl.formatMessage({ id: "Delete1" })} ${selectedRows.length} ${intl.formatMessage({ id: "Delete2" })}?`);
       setOpenSubmitDelete(true);
     }
   };
@@ -108,9 +108,9 @@ const UsersMain = () => {
     const response = await UserOp.updateUserInfo({ token }, updateData);
 
     if (response.error) {
-      setMessage("Đã có lỗi xảy ra, vui lòng thử lại sau");
+      setMessage(intl.formatMessage({ id: "HandleFail" }));
     } else {
-      setMessage("Cập nhật người dùng thành công");
+      setMessage(intl.formatMessage({ id: "UpdateSuccess" }));
     }
     setOpenNotification(true);
     setLoading(false);
@@ -142,7 +142,7 @@ const UsersMain = () => {
 
     if (missingFields.length > 0) {
       setMessage(
-        `Vui lòng điền đầy đủ các thông tin sau: ${missingFields.join(", ")}`
+        `${intl.formatMessage({ id: "MissingMessage" })}: ${missingFields.join(", ")}`
       );
       setOpenNotification(true);
       return false;
@@ -160,41 +160,41 @@ const UsersMain = () => {
     important?: boolean;
     onChange?: (id: keyof UserInfo, value: string) => void;
   }> = [
-    { id: "name", type: "text", label: "User.Name", important: true },
-    { id: "email", type: "email", label: "User.Email", important: true },
-    { id: "JobTitle", type: "text", label: "User.JobTitle", important: true },
-    {
-      id: "PhoneNumber",
-      type: "text",
-      label: "User.PhoneNumber",
-      important: true,
-    },
-    {
-      id: "AddressLine1",
-      type: "text",
-      label: "User.AddressLine1",
-      important: true,
-    },
-    {
-      id: "AddressLine2",
-      type: "text",
-      label: "User.AddressLine2",
-      important: false,
-    },
-    { id: "City", type: "text", label: "User.City", important: false },
-    {
-      id: "CountryRegionName",
-      type: "text",
-      label: "User.CountryRegionName",
-      important: false,
-    },
-    {
-      id: "isManager",
-      type: "checkbox",
-      label: "User.isManager",
-      important: false,
-    },
-  ];
+      { id: "name", type: "text", label: "User.Name", important: true },
+      { id: "email", type: "email", label: "User.Email", important: true },
+      { id: "JobTitle", type: "text", label: "User.JobTitle", important: true },
+      {
+        id: "PhoneNumber",
+        type: "text",
+        label: "User.PhoneNumber",
+        important: true,
+      },
+      {
+        id: "AddressLine1",
+        type: "text",
+        label: "User.AddressLine1",
+        important: true,
+      },
+      {
+        id: "AddressLine2",
+        type: "text",
+        label: "User.AddressLine2",
+        important: false,
+      },
+      { id: "City", type: "text", label: "User.City", important: false },
+      {
+        id: "CountryRegionName",
+        type: "text",
+        label: "User.CountryRegionName",
+        important: false,
+      },
+      {
+        id: "isManager",
+        type: "checkbox",
+        label: "User.isManager",
+        important: false,
+      },
+    ];
 
   const options = [
     {
@@ -242,17 +242,15 @@ const UsersMain = () => {
       <div className="sticky top-0 w-full flex gap-2 z-10 bg-white dark:bg-[#242526] h-12 min-h-12 px-2 justify-center place-items-center">
         <div className="gap-1 px-1 flex">
           <FaAngleLeft
-            className={`w-5 h-5 ${
-              page == 0 ? "text-gray-500 dark:text-darkContainerPrimary" : ""
-            }`}
+            className={`w-5 h-5 ${page == 0 ? "text-gray-500 dark:text-darkContainerPrimary" : ""
+              }`}
             onClick={() => {
               paginate(0);
             }}
           />
           <FaAngleRight
-            className={`w-5 h-5 ${
-              page == 1 ? "text-gray-500 dark:text-darkContainerPrimary" : ""
-            }`}
+            className={`w-5 h-5 ${page == 1 ? "text-gray-500 dark:text-darkContainerPrimary" : ""
+              }`}
             onClick={() => {
               paginate(1);
             }}
@@ -295,9 +293,8 @@ const UsersMain = () => {
                       paginate(Math.max(page - 1, 0));
                     }
                   }}
-                  className={`inset-0 flex flex-col gap-4 w-full h-full overflow-y-auto no-scrollbar place-items-center ${
-                    page === 1 ? "mb-2" : ""
-                  }`}
+                  className={`inset-0 flex flex-col gap-4 w-full h-full overflow-y-auto no-scrollbar place-items-center ${page === 1 ? "mb-2" : ""
+                    }`}
                 >
                   {indexoption.component}
                 </motion.div>
@@ -321,9 +318,9 @@ const UsersMain = () => {
             {loading ? (
               <LoadingUI />
             ) : openUserDetail ? (
-              "Chỉnh sửa"
+              intl.formatMessage({ id: "EditButton" })
             ) : (
-              "Xác nhận tạo"
+              intl.formatMessage({ id: "AddButtonConfirm" })
             )}
           </button>
         </motion.div>

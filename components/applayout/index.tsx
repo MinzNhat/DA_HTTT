@@ -1,8 +1,6 @@
 "use client"
 import React, { useRef, useState, FC, useEffect } from "react";
 import { motion } from "framer-motion";
-import { IoMdClose } from "react-icons/io";
-import ReactDOM from "react-dom";
 import { usePathname } from "next/navigation";
 import routes from "@/data/routes";
 import { FormattedMessage } from "react-intl";

@@ -52,14 +52,14 @@ const Navbar: FC<Props> = ({ openApp }) => {
   const checkUserLoggedIn = async () => {
     const token = localStorage?.getItem("accessToken");
     if (!token) {
-      setMessage("Vui lòng đăng nhập để tiếp tục");
+      setMessage(intl.formatMessage({ id: "Navbar.LoginAgain" }));
       setOpenLogout(true);
       return;
     }
 
     const response = await userOperation.getUserInfo({ token: token });
     if (response.error) {
-      setMessage("Vui lòng đăng nhập để tiếp tục");
+      setMessage(intl.formatMessage({ id: "Navbar.LoginAgain" }));
       setOpenLogout(true);
       return;
     } else {
@@ -80,7 +80,7 @@ const Navbar: FC<Props> = ({ openApp }) => {
   };
 
   const handleLogoutClick = () => {
-    setMessage("Xác nhận thoát phiên đăng nhập?");
+    setMessage(intl.formatMessage({ id: "Navbar.LogoutMessage" }));
     setOpenNotification(true);
   };
 
@@ -135,7 +135,7 @@ const Navbar: FC<Props> = ({ openApp }) => {
             <div className="absolute -left-2 flex w-44 !z-50 flex-col justify-start border dark:border-white/10 rounded-md bg-white bg-cover bg-no-repeat shadow-xl shadow-shadow-500 dark:!bg-[#242526] dark:text-white dark:shadow-none">
               <div className="flex flex-col py-1 px-2">
                 <button className="text-sm font-medium text-blue-700 dark:text-white text-left gap-2 flex place-items-center">
-                  Nền: {theme == "dark" ? "Tối" : "Sáng"} <div>{"->"}</div>
+                  <FormattedMessage id="theme" />: {theme == "dark" ? <FormattedMessage id="dark" /> : <FormattedMessage id="light" />} <div>{"->"}</div>
                   <div
                     className="cursor-pointer text-gray-600 mb-0.25"
                     onClick={() => {
@@ -153,12 +153,12 @@ const Navbar: FC<Props> = ({ openApp }) => {
               <div className="h-[0.5px] w-full bg-gray-200 dark:bg-white/10 " />
               <div className="flex flex-col py-1 px-2">
                 <button className="text-sm font-medium text-blue-700 dark:text-white text-left">
-                  Tình trạng pin:{" "}
+                  <FormattedMessage id="chargeStatus" />:{" "}
                   {charging == true
-                    ? "Đang sạc"
+                    ? <FormattedMessage id="chargeStatus1" />
                     : charging == false
-                      ? "Không cắm sạc"
-                      : "Không hỗ trỡ"}
+                      ? <FormattedMessage id="chargeStatus2" />
+                      : <FormattedMessage id="chargeStatus3" />}
                 </button>
               </div>
               <div className="h-[0.5px] w-full bg-gray-200 dark:bg-white/10 " />
@@ -220,7 +220,7 @@ const Navbar: FC<Props> = ({ openApp }) => {
               {level && typeof level == "number" ? (level * 100).toFixed(2) : 40}
             </div>
           </div>
-          <div className="text-sm font-semibold text-blue-700 dark:text-white hidden sm:block">
+          <div className="text-sm font-semibold text-blue-700 dark:text-white hidden sm:flex w-14 justify-center">
             {formattedTime ?? "00:00:00"}
           </div>
         </div>
