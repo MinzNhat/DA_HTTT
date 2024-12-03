@@ -50,6 +50,11 @@ const routes = [
     path: "statistics",
     icon: <FaChartColumn className="h-4 w-4" />,
   },
+  {
+    name: "Phân tích",
+    path: "analysis",
+    icon: <FaChartColumn className="h-4 w-4" />,
+  },
 ];
 
 export default routes;
