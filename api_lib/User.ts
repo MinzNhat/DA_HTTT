@@ -1,10 +1,51 @@
 import axios from "axios";
 import { UserInfo } from "@/providers/PassedData";
 
-interface GetAllUser {
+interface CustomerStore {
+  id: number;
+  Name: string;
+  BusinessType: string;
+  Specialty: string;
+  AnnualSales: string;
+  AnnualRevenue: string;
+  YearOpened: number;
+  SquareFeet: number;
+  NumberOfEmployees: number;
+  City: string;
+  AddressLine1: string;
+  AddressLine2: string | null;
+  CountryRegionName: string;
+}
+
+interface CustomerIndividual {
+  id: number;
+  FirstName: string;
+  LastName: string;
+  MiddleName: string;
+  Title: string;
+  EmailAddress: string;
+  PhoneNumber: string;
+  City: string;
+  AddressLine1: string;
+  AddressLine2: string;
+  CountryRegionName: string;
+}
+
+export interface CustomerInfo {
+  id: number;
+  Employee: number | null;
+  Territory: number;
+  CustomerStore: CustomerStore | null;
+  CustomerIndividual: CustomerIndividual | null;
+}
+
+interface GetAllCustomer {
   currentPage: number;
 }
 
+interface CustomerOpPayload {
+  token: string;
+}
 interface UserOpPayload {
   token: string;
 }
@@ -45,7 +86,7 @@ export class UserOperation {
     }
   }
 
-  async getAllUserInfo(payload: UserOpPayload, getData: GetAllUser) {
+  async getAllUserInfo(payload: CustomerOpPayload, getData: GetAllCustomer) {
     try {
       const response = await axios.post(
         `${this.baseURL}/getcustomer/`,
@@ -59,9 +100,10 @@ export class UserOperation {
           },
         }
       );
+      console.log(response);
 
       return response.status >= 200 || response.status < 300
-        ? { error: false, data: response.data.data as UserInfo[] }
+        ? { error: false, data: response.data.data as CustomerInfo[] }
         : { error: true, data: null };
     } catch (err: any) {
       return { error: true, data: null };

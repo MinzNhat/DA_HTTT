@@ -1,16 +1,17 @@
 import Table from "@/components/table";
-import { UserInfo } from "@/providers/PassedData";
+import { CustomerInfo } from "@/api_lib/User";
 import { columnsData } from "./variable/columnsData";
 import CustomButton from "./CustomTableButton";
+import { useIntl } from "react-intl";
 
 type TableProps = {
   reloadData: () => void;
-  tableData: UserInfo[] | null;
+  tableData: CustomerInfo[] | null;
   currentPage: number;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
-  selectedRows: UserInfo[];
-  setSelectedRows: React.Dispatch<React.SetStateAction<UserInfo[]>>;
-  onRowClick: (_data: UserInfo) => void;
+  selectedRows: CustomerInfo[];
+  setSelectedRows: React.Dispatch<React.SetStateAction<CustomerInfo[]>>;
+  onRowClick: (_data: CustomerInfo) => void;
   openAdd: () => void;
   handleDelete: () => void;
 };
@@ -37,7 +38,7 @@ const UserTable = ({
       currentPage={currentPage}
       setCurrentPage={setCurrentPage}
       currentSize={10}
-      primaryKey="name"
+      primaryKey="id"
       selectedRows={selectedRows}
       setSelectedRows={setSelectedRows}
       onRowClick={onRowClick}
