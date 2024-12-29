@@ -1,23 +1,22 @@
 import InputField from "@/components/fields";
 import { FormattedMessage } from "react-intl";
-import { UpdateUserInfo } from "@/api_lib/User";
-import { UserInfo } from "@/providers/PassedData";
+import { CustomerInfo, UpdateUserInfo } from "@/api_lib/User";
 
 interface Props {
-  data: UserInfo | UpdateUserInfo;
+  data: CustomerInfo | UpdateUserInfo;
   fields: Array<{
-    id: keyof UserInfo | keyof UpdateUserInfo;
+    id: keyof CustomerInfo | keyof UpdateUserInfo;
     type: string;
     label: string;
     disable?: boolean;
     important?: boolean;
     onChange?: (
-      id: keyof UserInfo | keyof UpdateUserInfo,
+      id: keyof CustomerInfo | keyof UpdateUserInfo,
       value: string
     ) => void;
   }>;
   handleChange: (
-    id: keyof UserInfo | keyof UpdateUserInfo,
+    id: keyof CustomerInfo | keyof UpdateUserInfo,
     value: string | number
   ) => void;
 }

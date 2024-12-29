@@ -1,33 +1,41 @@
-import { UserInfo } from "@/providers/PassedData";
+import { CustomerInfo } from "@/api_lib/User";
 import { Column } from "react-table";
 
-export const columnsData: Column<UserInfo>[] = [
+const getDisplayValue = (value: any): string => {
+  return value ? value.toString() : "không có dữ liệu";
+};
+
+export const columnsData: Column<CustomerInfo>[] = [
   {
-    Header: "Tên người dùng",
-    accessor: "name",
+    Header: "ID",
+    accessor: "id",
   },
   {
-    Header: "Chức vụ",
-    accessor: "JobTitle",
+    Header: "Lãnh thổ",
+    accessor: (row) => getDisplayValue(row.Territory),
   },
   {
-    Header: "Số điện thoại",
-    accessor: "PhoneNumber",
+    Header: "ID cửa hàng",
+    accessor: (row) => getDisplayValue(row.CustomerStore?.id),
   },
   {
-    Header: "Thành phố",
-    accessor: "City",
+    Header: "Tên cửa hàng",
+    accessor: (row) => getDisplayValue(row.CustomerStore?.Name),
   },
   {
-    Header: "Địa chỉ 1",
-    accessor: "AddressLine1",
+    Header: "Loại hình kinh doanh",
+    accessor: (row) => getDisplayValue(row.CustomerStore?.BusinessType),
   },
   {
-    Header: "Địa chỉ 2",
-    accessor: "AddressLine2",
+    Header: "ID cá nhân",
+    accessor: (row) => getDisplayValue(row.CustomerIndividual?.id),
   },
   {
-    Header: "Quốc gia",
-    accessor: "CountryRegionName",
+    Header: "Tên",
+    accessor: (row) => getDisplayValue(row.CustomerIndividual?.LastName),
+  },
+  {
+    Header: "Chức danh",
+    accessor: (row) => getDisplayValue(row.CustomerIndividual?.Title),
   },
 ];

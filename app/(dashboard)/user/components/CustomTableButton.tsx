@@ -1,6 +1,6 @@
 "use client";
 
-import { UserInfo } from "@/providers/PassedData";
+import { CustomerInfo } from "@/api_lib/User";
 import { Button } from "@nextui-org/react";
 import {
   MdRestartAlt,
@@ -11,7 +11,7 @@ import { FormattedMessage } from "react-intl";
 
 interface CustomButtonProps {
   fetchData: () => void;
-  selectedRows: UserInfo[];
+  selectedRows: CustomerInfo[];
   openAdd: () => void;
   handleDelete: () => void;
 }
@@ -31,7 +31,6 @@ const CustomButton = ({
       >
         <MdRestartAlt />
         <FormattedMessage id="ReloadButton" />
-
       </Button>
       <Button
         className={`col-span-1 w-full lg:w-fit flex items-center text-md hover:cursor-pointer bg-lightPrimary p-2 hover:bg-gray-100 dark:bg-[#3A3B3C] dark:hover:bg-white/20 dark:active:bg-white/10
