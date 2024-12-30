@@ -19,5 +19,4 @@ export const apps: AppData[] = [
     { id: 6, name: "User", icon: FaUsers, className: "aspect-square", link: "/user" },
     { id: 7, name: "Products", icon: FaClipboardList, className: "aspect-square", link: "/products" },
     { id: 8, name: "Settings", icon: FaCog, className: "aspect-square", link: "/settings" },
-    { id: 9, name: "Analysis", icon: FaCog, className: "aspect-square", link: "/analysis" },
 ];

@@ -10,6 +10,10 @@ import RenderCase from "@/components/rendercase";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { FC, Suspense, useEffect, useState } from "react";
 import { useOpenAppDataContext } from "@/providers/OpenAppProvider";
+import { Button } from "@nextui-org/button";
+import { RiRobot3Line } from "react-icons/ri";
+import DetailPopup from "@/components/popup";
+import ChatMain from "./analysis/components/MainPage";
 
 interface Props {
     children: React.ReactNode;
@@ -23,6 +27,10 @@ const RootStructure: FC<Props> = ({ children }) => {
     const [isVisible, setIsVisible] = useState(true);
     const { openApp, setOpenApp } = useOpenAppDataContext();
     const [isTaskbarVisible, setIsTaskbarVisible] = useState(true);
+    const [openGPT, setOpenGPT] = useState(false);
+    const [messages, setMessages] = useState([
+        { type: "bot", content: <p>Chào bạn! Tôi có thể giúp gì cho bạn?</p> },
+    ]);
 
     const handleCloseAppLayout = () => {
         setOpenApp({ openApp: false, appName: "/menu" });
@@ -71,6 +79,11 @@ const RootStructure: FC<Props> = ({ children }) => {
 
     return (
         <section className="flex w-full max-h-dvh h-dvh overflow-clip">
+            <RenderCase renderIf={openGPT}>
+                <DetailPopup onClose={() => setOpenGPT(!openGPT)} title="Analysis" icon={<RiRobot3Line className="w-5 h-5" />}>
+                    <ChatMain messages={messages} setMessages={setMessages} />
+                </DetailPopup>
+            </RenderCase>
             <div className="w-full bg-[url('/hcmut.jpg')] bg-cover bg-center max-h-dvh h-dvh">
                 <main className={`max-h-dvh h-dvh flex flex-col justify-center transition-all relative duration-500 backdrop-blur-lg bg-black/50 dark:bg-black/40`}>
                     <Navbar openApp={!(!openApp.openApp || !isVisible)} />
@@ -96,6 +109,18 @@ const RootStructure: FC<Props> = ({ children }) => {
                                 <Suspense fallback={<CustomLoadingElement />}>{children}</Suspense>
                             </AppLayout>
                         </RenderCase>
+
+                        <Button
+                            onClick={() => setOpenGPT(!openGPT)}
+                            className={`${pathname === "/menu" ? "right-1 bottom-0" : "right-4 bottom-4 transform hover:scale-125"} z-30 absolute border-2 bg-white dark:bg-[#242526]  h-10 w-10 p-2 min-w-10 text-black dark:text-white 
+                                border-gray-300 dark:border-white rounded-full transition-all duration-300 ease-in-out`}
+                        >
+                            <motion.div
+                                whileHover={{ rotate: -10, transition: { yoyo: Infinity, duration: 0.3 } }}
+                            >
+                                <RiRobot3Line className="w-5 h-5" />
+                            </motion.div>
+                        </Button>
                     </motion.div>
 
                     <Taskbar openApp={!(!openApp.openApp || !isVisible)} isVisible={isTaskbarVisible} />

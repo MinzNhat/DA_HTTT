@@ -27,18 +27,9 @@ const LanguageSwitcher: FC<Props> = ({ version = '1' }) => {
 
     useEffect(() => {
         const newSearchParams = new URLSearchParams(searchParams.toString());
-        newSearchParams.set('locale', locale);
+        newSearchParams.set('locale', locale ?? 'vi');
         router.replace(`${pathname}?${newSearchParams.toString()}`);
     }, [locale, pathname, router, searchParams]);
-
-    useEffect(() => {
-        if (typeof window !== 'undefined' && window.localStorage) {
-            const storedLocale = localStorage.getItem('locale');
-            if (storedLocale && storedLocale !== locale) {
-                setLocale(storedLocale);
-            }
-        }
-    }, []);
 
     const renderLanguageButtons = (isDropdown: boolean) => {
         const buttonClasses =

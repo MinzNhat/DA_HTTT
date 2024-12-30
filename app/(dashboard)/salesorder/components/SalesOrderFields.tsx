@@ -29,7 +29,7 @@ const SalesOrderFields: React.FC<Props> = ({ data, fields, handleChange }) => {
           key={id as string}
           className="flex gap-2 w-full flex-col lg:flex-row"
         >
-          <div className="lg:w-44 lg:min-w-[11rem] flex lg:justify-between place-items-center">
+          <div className="lg:w-44 lg:min-w-[13rem] flex lg:justify-between place-items-center whitespace-nowrap">
             <strong className="flex gap-1">
               <FormattedMessage id={label} />
               {important && <div className="text-red-500">*</div>}
@@ -40,7 +40,7 @@ const SalesOrderFields: React.FC<Props> = ({ data, fields, handleChange }) => {
             <InputField
               variant={true}
               id={label}
-              disabled={disable}
+              disabled={true}
               type={type}
               value={data[id as keyof SalesOrderInfo] as string}
               setValue={(value: string) =>

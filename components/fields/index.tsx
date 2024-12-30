@@ -119,7 +119,7 @@ const InputField: FC<Props> = ({
                 id={id}
                 placeholder={type === "date" ? "" : placeholder}
                 className={`flex ${variant ? "h-10" : "h-12"
-                  } w-full items-center justify-center rounded-xl border ${className ? className : "bg-white/0"
+                  } w-full rounded-xl border ${className ? className : "bg-white/0"
                   } p-3 text-sm outline-none duration-300 ${disabled
                     ? "dark:border-none !bg-gray-100 dark:!bg-white/5 dark:placeholder:!text-[rgba(255,255,255,0.15)]"
                     : state === "error"

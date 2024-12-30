@@ -33,7 +33,7 @@ const CustomButton = ({
         <FormattedMessage id="ReloadButton" />
       </Button>
       <Button
-        className={`w-full lg:w-fit col-span-2 flex items-center text-md hover:cursor-pointer bg-lightPrimary p-2 text-red-500 hover:bg-gray-100 dark:bg-[#3A3B3C] dark:hover:bg-white/20 dark:active:bg-white/10
+        className={`w-full lg:w-fit col-span-1 flex items-center text-md hover:cursor-pointer bg-lightPrimary p-2 text-red-500 hover:bg-gray-100 dark:bg-[#3A3B3C] dark:hover:bg-white/20 dark:active:bg-white/10
           linear justify-center rounded-lg font-medium dark:font-base transition duration-200`}
         onClick={handleDelete}
       >

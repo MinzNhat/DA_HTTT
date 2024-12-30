@@ -23,7 +23,6 @@ const TerritoryTable = ({
   selectedRows,
   setSelectedRows,
   onRowClick,
-  openAdd,
 }: TableProps) => {
   const intl = useIntl();
   return (
@@ -44,8 +43,6 @@ const TerritoryTable = ({
       customButton={
         <CustomButton
           fetchData={reloadData}
-          selectedRows={selectedRows}
-          openAdd={openAdd}
         />
       }
       customNoData={<>Không có lịch sử bài viết</>}
