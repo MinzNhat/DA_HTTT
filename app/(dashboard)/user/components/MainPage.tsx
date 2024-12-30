@@ -8,7 +8,11 @@ import RenderCase from "@/components/rendercase";
 import NotiPopup from "@/components/notification";
 import SubmitPopup from "@/components/submit";
 import { UserOperation } from "@/api_lib/User";
-import { CustomerInfo } from "@/api_lib/User";
+import {
+  CustomerInfo,
+  CustomerStore,
+  CustomerIndividual,
+} from "@/api_lib/User";
 import UserTable from "./Table";
 import UserFields from "./UserFields";
 import { useIntl } from "react-intl";
@@ -157,7 +161,7 @@ const UsersMain = () => {
     return Math.abs(offset) * velocity;
   };
 
-  const handleChange = (id: keyof CustomerInfo, value: string) => {
+  const handleChange = (id: NestedCustomerInfoKey, value: string) => {
     const [mainKey, subKey] = id.split(".");
     if (subKey) {
       setUserDetail((prev) => ({
@@ -193,29 +197,99 @@ const UsersMain = () => {
 
   const swipeConfidenceThreshold = 1;
 
+  type NestedCustomerInfoKey =
+    | keyof CustomerInfo
+    | `CustomerStore.${keyof CustomerStore}`
+    | `CustomerIndividual.${keyof CustomerIndividual}`;
+
   const userFields: Array<{
-    id: keyof CustomerInfo;
+    id: NestedCustomerInfoKey;
     type: string;
     label: string;
     disable?: boolean;
     important?: boolean;
-    onChange?: (id: keyof CustomerInfo, value: string) => void;
+    onChange?: (id: NestedCustomerInfoKey, value: string) => void;
   }> = [
-    { id: "CustomerStore", type: "text", label: "Store.Name", important: true },
     {
-      id: "CustomerIndividual",
+      id: "CustomerStore.Name",
+      type: "text",
+      label: "Store.Name",
+      important: true,
+    },
+    {
+      id: "CustomerStore.BusinessType",
+      type: "text",
+      label: "Store.BusinessType",
+      important: true,
+    },
+    {
+      id: "CustomerStore.Specialty",
+      type: "text",
+      label: "Store.Specialty",
+      important: true,
+    },
+    {
+      id: "CustomerStore.AnnualSales",
+      type: "text",
+      label: "Store.AnnualSales",
+      important: true,
+    },
+    {
+      id: "CustomerStore.AnnualRevenue",
+      type: "text",
+      label: "Store.AnnualRevenue",
+      important: true,
+    },
+    {
+      id: "CustomerIndividual.LastName",
       type: "text",
       label: "Individual.LastName",
       important: true,
     },
     {
-      id: "CustomerIndividual",
+      id: "CustomerIndividual.EmailAddress",
       type: "text",
-      label: "Individual.Title",
+      label: "Individual.EmailAddress",
       important: true,
     },
-    { id: "Territory", type: "text", label: "User.Territory", important: true },
+    {
+      id: "CustomerIndividual.PhoneNumber",
+      type: "text",
+      label: "Individual.PhoneNumber",
+      important: true,
+    },
   ];
+
+  const getNestedFieldValue = (
+    data: CustomerInfo,
+    id: NestedCustomerInfoKey
+  ): string => {
+    const keys = id.split(".");
+    if (keys.length === 1) {
+      return data[keys[0] as keyof CustomerInfo]
+        ? data[keys[0] as keyof CustomerInfo]!.toString()
+        : "không có dữ liệu";
+    } else if (keys.length === 2) {
+      const [parentKey, childKey] = keys;
+      if (parentKey === "CustomerStore" && data.CustomerStore) {
+        return data.CustomerStore[childKey as keyof CustomerStore]
+          ? data.CustomerStore[childKey as keyof CustomerStore]!.toString()
+          : "không có dữ liệu";
+      } else if (
+        parentKey === "CustomerIndividual" &&
+        data.CustomerIndividual
+      ) {
+        return data.CustomerIndividual[childKey as keyof CustomerIndividual]
+          ? data.CustomerIndividual[
+              childKey as keyof CustomerIndividual
+            ]!.toString()
+          : "không có dữ liệu";
+      }
+    }
+    return "không có dữ liệu";
+  };
+
+  console.log(userDetail);
 
   const options = [
     {
