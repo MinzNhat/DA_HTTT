@@ -16,6 +16,7 @@ import ProductTable from "./Table";
 import ProductFields from "./ProductFields";
 import { useIntl } from "react-intl";
 import LoadingUI from "@/components/loading";
+import SpcOfferList from "./SpcOfferList";
 
 const variants = {
     enter: (direction: number) => {
@@ -81,6 +82,7 @@ const ProductsMain = () => {
         ListPrice: null,
     });
     const [data, setData] = useState<ProductInfo[] | null>(null);
+
 
     const reloadData = useCallback(async () => {
         setData(null);
@@ -332,23 +334,30 @@ const ProductsMain = () => {
         },
         {
             id: 1,
-            component: (
-                <div className="flex flex-col gap-4 w-full h-full md:w-1/2 p-4">
-                    {openProductDetail ? (
+            component: openProductDetail ? (
+                <div className="flex flex-col lg:flex-row gap-4 w-full h-full p-4">
+                    <div className="flex w-full flex-col gap-4">
                         <ProductFields
                             data={productDetail}
                             handleChange={handleChange}
                             fields={productFields}
                         />
-                    ) : (
-                        <ProductFields
-                            data={productData}
-                            handleChange={handleChange2}
-                            fields={productFields}
-                        />
-                    )}
+                    </div>
+                    <div className="flex w-full flex-col gap-4">
+                        <SpcOfferList />
+                    </div>
                 </div>
-            ),
+
+            ) : (
+                <div className="flex flex-col gap-4 w-full h-full md:w-1/2 p-4">
+
+                    <ProductFields
+                        data={productData}
+                        handleChange={handleChange2}
+                        fields={productFields}
+                    />
+                </div>
+            )
         },
     ];
 

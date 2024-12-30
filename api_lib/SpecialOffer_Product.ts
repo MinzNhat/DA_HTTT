@@ -1,43 +1,21 @@
 import axios from "axios";
 
-export interface SpecialOfferInfo {
-  id: number;
-  Description: string;
-  Type: string;
-  StartDate: string;
-  EndDate: string;
-  MinQty: number;
-  MaxQty: number;
-  DiscountPct: string;
-}
-
-interface SpecialOfferPayload {
+interface SpecialOfferProductPayload {
   token: string;
 }
 
-export interface UpdateSpecialOffer {
-  specialOfferID: String;
-  Description: string;
-  Type: string;
-  StartDate: string;
-  EndDate: string;
-  MinQty: number;
-  MaxQty: number;
-  DiscountPct: string;
+export interface GetSpecialOfferProduct {
+  productID: string;
 }
 
-export interface CreateSpecialOffer {
-  Description: string;
-  DiscountPct: string;
-  Type: string;
-  StartDate: string;
-  EndDate: string;
-  MinQty: number;
-  MaxQty: number;
+export interface CreateSpecialOfferProduct {
+  specialOfferID: string;
+  productID: string;
 }
 
-export interface DeleteSpecialOffer {
-  specialOfferID: String;
+export interface DeleteSpecialOfferProduct {
+  specialOfferID: string;
+  productID: string;
 }
 
 export class SpecialOfferProductrOperation {
@@ -47,9 +25,9 @@ export class SpecialOfferProductrOperation {
     this.baseUrl = `${process.env.NEXT_PUBLIC_BACKEND_LOGIN_ENDPOINT!}/sales`;
   }
 
-  async getSpecialOffer(payload: SpecialOfferPayload) {
+  async getSpecialOffer(payload: SpecialOfferProductPayload, getData: GetSpecialOfferProduct) {
     try {
-      const response = await axios.get(`${this.baseUrl}/getallspecialoffer/`, {
+      const response = await axios.post(`${this.baseUrl}/getallspecialoffer/`, getData, {
         headers: {
           Authorization: `Bearer ${payload.token}`,
           "Content-Type": "application/json",
@@ -57,7 +35,7 @@ export class SpecialOfferProductrOperation {
       });
 
       return response.status >= 200 || response.status < 300
-        ? { error: false, data: response.data as SpecialOfferInfo }
+        ? { error: false, data: response.data as string[] }
         : { error: true, data: null };
     } catch (err: any) {
       return { error: true, data: null };
@@ -65,8 +43,8 @@ export class SpecialOfferProductrOperation {
   }
 
   async deleteSpecialOfferInfo(
-    payload: SpecialOfferPayload,
-    updateData: DeleteSpecialOffer
+    payload: SpecialOfferProductPayload,
+    updateData: DeleteSpecialOfferProduct
   ) {
     try {
       const response = await axios.post(
@@ -81,7 +59,7 @@ export class SpecialOfferProductrOperation {
       );
 
       return response.status >= 200 || response.status < 300
-        ? { error: false, data: response.data as SpecialOfferInfo }
+        ? { error: false, data: true }
         : { error: true, data: null };
     } catch (err: any) {
       return { error: true, data: null };
@@ -89,13 +67,13 @@ export class SpecialOfferProductrOperation {
   }
 
   async createSpecialOfferInfo(
-    payload: SpecialOfferPayload,
-    updateData: CreateSpecialOffer
+    payload: SpecialOfferProductPayload,
+    createData: CreateSpecialOfferProduct
   ) {
     try {
       const response = await axios.post(
-        `${this.baseUrl}/createspecialoffer/`,
-        updateData,
+        `${this.baseUrl}/createspecialofferproduct/`,
+        createData,
         {
           headers: {
             Authorization: `Bearer ${payload.token}`,
@@ -105,7 +83,7 @@ export class SpecialOfferProductrOperation {
       );
 
       return response.status >= 200 || response.status < 300
-        ? { error: false, data: response.data as SpecialOfferInfo }
+        ? { error: false, data: response.data as string[] }
         : { error: true, data: null };
     } catch (err: any) {
       return { error: true, data: null };

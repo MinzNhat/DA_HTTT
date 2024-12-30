@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export interface SalesOrderDetail {
-  productID: string;
+  id: string;
   OrderQty: string;
 }
 
@@ -117,6 +117,7 @@ export class SalesOrderOperation {
         ? { error: false, data: response.data as SalesOrderInfo }
         : { error: true, data: null };
     } catch (err: any) {
+      console.log(err)
       return { error: true, data: null };
     }
   }

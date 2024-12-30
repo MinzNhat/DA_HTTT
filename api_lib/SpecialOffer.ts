@@ -97,6 +97,7 @@ export class SpecialOfferOperation {
         ? { error: false, data: response.data as SpecialOfferInfo }
         : { error: true, data: null };
     } catch (err: any) {
+      console.log(err)
       return { error: true, data: null };
     }
   }

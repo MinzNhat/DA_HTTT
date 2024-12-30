@@ -174,11 +174,7 @@ const TerritoryMain = () => {
               fields={territoryFields}
             />
           ) : (
-            <TerritoryFields
-              data={territoryData}
-              handleChange={handleChange2}
-              fields={territoryFields}
-            />
+            <></>
           )}
         </div>
       ),
@@ -204,10 +200,9 @@ const TerritoryMain = () => {
             }}
           />
           <FaAngleRight
-            className={`w-5 h-5 ${page == 1 ? "text-gray-500 dark:text-darkContainerPrimary" : ""
-              }`}
+            className={`w-5 h-5 text-gray-500 dark:text-darkContainerPrimary`}
             onClick={() => {
-              paginate(1);
+              paginate(0);
             }}
           />
         </div>
@@ -241,7 +236,7 @@ const TerritoryMain = () => {
                   dragElastic={1}
                   onDragEnd={(_e, { offset, velocity }) => {
                     const swipe = swipePower(offset.x, velocity.x);
-
+                    if (!openTerritoryDetail) return
                     if (swipe < -swipeConfidenceThreshold) {
                       paginate(Math.min(page + 1, options.length - 1));
                     } else if (swipe > swipeConfidenceThreshold) {

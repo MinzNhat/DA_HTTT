@@ -184,7 +184,7 @@ const CheckTableV1 = <T extends TableData>(props: TableProps<T>) => {
 
                 <RenderCase renderIf={page && page.length > 0}>
                     <div className="max-h-full h-full max-w-full overflow-scroll no-scrollbar w-full">
-                        <table {...getTableProps()} className="max-h-full h-full overflow-y-scroll no-scrollbar w-full">
+                        <table {...getTableProps()} className="max-h-full overflow-y-scroll no-scrollbar w-full">
                             <thead className="sticky top-0 z-10 w-full bg-lightContainer dark:bg-darkContainer">
                                 {headerGroups.map((headerGroup, headerGroupIndex) => {
                                     const { key, ...headerProps } = headerGroup.getHeaderGroupProps();
@@ -244,7 +244,7 @@ const CheckTableV1 = <T extends TableData>(props: TableProps<T>) => {
                                                 const { key, ...cellProps } = cell.getCellProps();
                                                 return (
                                                     <td {...cellProps} key={key} className="pt-[14px] pb-[16px] sm:text-[14px] pr-6">
-                                                        <p className="h-full w-full">
+                                                        <p className="w-full">
                                                             {(renderCell && cell.column.Header ? renderCell(cell.column.Header?.toString(), cell.value, row.original, index, isSelected) : null) || cell.value || <FormattedMessage id="Table.Nodata" />}
                                                         </p>
                                                     </td>

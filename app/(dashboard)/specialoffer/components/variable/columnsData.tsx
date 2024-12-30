@@ -1,21 +1,22 @@
-import { ProductInfo } from "@/api_lib/Product";
+import { SpecialOfferInfo } from "@/api_lib/SpecialOffer";
+import { IntlShape } from "react-intl";
 import { Column } from "react-table";
 
-export const columnsData: Column<ProductInfo>[] = [
+export const createColumnsData = (intl: IntlShape): Column<SpecialOfferInfo>[] => [
   {
-    Header: "Mô tả",
+    Header: intl.formatMessage({ id: "SpcOffer.Description" }),
     accessor: "Description",
   },
   {
-    Header: "Ngày bắt đầu",
+    Header: intl.formatMessage({ id: "SpcOffer.StartDate" }),
     accessor: "StartDate",
   },
   {
-    Header: "Ngày kết thúc",
+    Header: intl.formatMessage({ id: "SpcOffer.EndDate" }),
     accessor: "EndDate",
   },
   {
-    Header: "Phần trăm giảm giá ",
+    Header: intl.formatMessage({ id: "SpcOffer.DiscountPct" }),
     accessor: "DiscountPct",
   },
 ];
