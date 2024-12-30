@@ -1,7 +1,7 @@
 import axios from "axios";
 import { UserInfo } from "@/providers/PassedData";
 
-interface CustomerStore {
+export interface CustomerStore {
   id: number;
   Name: string;
   BusinessType: string;
@@ -17,7 +17,7 @@ interface CustomerStore {
   CountryRegionName: string;
 }
 
-interface CustomerIndividual {
+export interface CustomerIndividual {
   id: number;
   FirstName: string;
   LastName: string;
