@@ -33,22 +33,22 @@ const getNestedFieldValue = (
   if (keys.length === 1) {
     return data[keys[0] as keyof CustomerInfo]
       ? data[keys[0] as keyof CustomerInfo]!.toString()
-      : "không có dữ liệu";
+      : "Không có dữ liệu";
   } else if (keys.length === 2) {
     const [parentKey, childKey] = keys;
     if (parentKey === "CustomerStore" && data.CustomerStore) {
       return data.CustomerStore[childKey as keyof CustomerStore]
         ? data.CustomerStore[childKey as keyof CustomerStore]!.toString()
-        : "không có dữ liệu";
+        : "Không có dữ liệu";
     } else if (parentKey === "CustomerIndividual" && data.CustomerIndividual) {
       return data.CustomerIndividual[childKey as keyof CustomerIndividual]
         ? data.CustomerIndividual[
-            childKey as keyof CustomerIndividual
-          ]!.toString()
-        : "không có dữ liệu";
+          childKey as keyof CustomerIndividual
+        ]!.toString()
+        : "Không có dữ liệu";
     }
   }
-  return "không có dữ liệu";
+  return "Không có dữ liệu";
 };
 
 const UserFields: React.FC<Props> = ({ data, fields, handleChange }) => {

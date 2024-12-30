@@ -12,6 +12,7 @@ import AnsiToHtml from 'ansi-to-html';
 import remarkGfm from "remark-gfm";
 import LoadingUI from "@/components/loading";
 import RenderCase from "@/components/rendercase";
+import { useIntl } from "react-intl";
 
 export default function ChatMain({ messages, setMessages }) {
     const [input, setInput] = useState("");
@@ -19,7 +20,7 @@ export default function ChatMain({ messages, setMessages }) {
     const chatRef = useRef(null);
     const analysisOperation = new AnalysisOperation();
     const ansiToHtml = new AnsiToHtml();
-
+    const intl = useIntl();
     const simulateBotReply = (fullReply: React.ReactNode) => {
 
         const nodes = React.Children.toArray(fullReply);
@@ -260,7 +261,7 @@ export default function ChatMain({ messages, setMessages }) {
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
                         onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-                        placeholder="Nhập tin nhắn..."
+                        placeholder={intl.formatMessage({ id: "Analysis.InputPlaceholder" })}
                     />
                     <button
                         onClick={sendMessage}

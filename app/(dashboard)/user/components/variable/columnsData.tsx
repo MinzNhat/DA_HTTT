@@ -1,41 +1,30 @@
 import { CustomerInfo } from "@/api_lib/User";
+import { IntlShape } from "react-intl";
 import { Column } from "react-table";
 
 const getDisplayValue = (value: any): string => {
-  return value ? value.toString() : "không có dữ liệu";
+  return value ? value.toString() : "Không có dữ liệu";
 };
 
-export const columnsData: Column<CustomerInfo>[] = [
+export const createColumnsData = (intl: IntlShape): Column<CustomerInfo>[] => [
   {
-    Header: "ID",
-    accessor: "id",
-  },
-  {
-    Header: "Lãnh thổ",
+    Header: intl.formatMessage({ id: "User.Territory" }),
     accessor: (row) => getDisplayValue(row.Territory),
   },
   {
-    Header: "ID cửa hàng",
-    accessor: (row) => getDisplayValue(row.CustomerStore?.id),
-  },
-  {
-    Header: "Tên cửa hàng",
+    Header: intl.formatMessage({ id: "Store.Name" }),
     accessor: (row) => getDisplayValue(row.CustomerStore?.Name),
   },
   {
-    Header: "Loại hình kinh doanh",
+    Header: intl.formatMessage({ id: "Store.BusinessType" }),
     accessor: (row) => getDisplayValue(row.CustomerStore?.BusinessType),
   },
   {
-    Header: "ID cá nhân",
-    accessor: (row) => getDisplayValue(row.CustomerIndividual?.id),
-  },
-  {
-    Header: "Tên",
+    Header: intl.formatMessage({ id: "Individual.LastName" }),
     accessor: (row) => getDisplayValue(row.CustomerIndividual?.LastName),
   },
   {
-    Header: "Chức danh",
+    Header: intl.formatMessage({ id: "User.Role" }),
     accessor: (row) => getDisplayValue(row.CustomerIndividual?.Title),
   },
 ];

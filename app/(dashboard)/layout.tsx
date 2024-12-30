@@ -14,6 +14,7 @@ import { Button } from "@nextui-org/button";
 import { RiRobot3Line } from "react-icons/ri";
 import DetailPopup from "@/components/popup";
 import ChatMain from "./analysis/components/MainPage";
+import { useIntl } from "react-intl";
 
 interface Props {
     children: React.ReactNode;
@@ -28,8 +29,9 @@ const RootStructure: FC<Props> = ({ children }) => {
     const { openApp, setOpenApp } = useOpenAppDataContext();
     const [isTaskbarVisible, setIsTaskbarVisible] = useState(true);
     const [openGPT, setOpenGPT] = useState(false);
+    const intl = useIntl();
     const [messages, setMessages] = useState([
-        { type: "bot", content: <p>Chào bạn! Tôi có thể giúp gì cho bạn?</p> },
+        { type: "bot", content: <p>{intl.formatMessage({ id: "Analysis.FirstMessage" })}</p> },
     ]);
 
     const handleCloseAppLayout = () => {
@@ -80,7 +82,7 @@ const RootStructure: FC<Props> = ({ children }) => {
     return (
         <section className="flex w-full max-h-dvh h-dvh overflow-clip">
             <RenderCase renderIf={openGPT}>
-                <DetailPopup onClose={() => setOpenGPT(!openGPT)} title="Analysis" icon={<RiRobot3Line className="w-5 h-5" />}>
+                <DetailPopup onClose={() => setOpenGPT(!openGPT)} title={intl.formatMessage({ id: "routes.analysis" })} icon={<RiRobot3Line className="w-5 h-5" />}>
                     <ChatMain messages={messages} setMessages={setMessages} />
                 </DetailPopup>
             </RenderCase>

@@ -115,8 +115,7 @@ const UsersMain = () => {
       setOpenNotification(true);
     } else {
       setMessage(
-        `${intl.formatMessage({ id: "Delete1" })} ${
-          selectedRows.length
+        `${intl.formatMessage({ id: "Delete1" })} ${selectedRows.length
         } ${intl.formatMessage({ id: "Delete2" })}?`
       );
       setOpenSubmitDelete(true);
@@ -210,86 +209,55 @@ const UsersMain = () => {
     important?: boolean;
     onChange?: (id: NestedCustomerInfoKey, value: string) => void;
   }> = [
-    {
-      id: "CustomerStore.Name",
-      type: "text",
-      label: "Store.Name",
-      important: true,
-    },
-    {
-      id: "CustomerStore.BusinessType",
-      type: "text",
-      label: "Store.BusinessType",
-      important: true,
-    },
-    {
-      id: "CustomerStore.Specialty",
-      type: "text",
-      label: "Store.Specialty",
-      important: true,
-    },
-    {
-      id: "CustomerStore.AnnualSales",
-      type: "text",
-      label: "Store.AnnualSales",
-      important: true,
-    },
-    {
-      id: "CustomerStore.AnnualRevenue",
-      type: "text",
-      label: "Store.AnnualRevenue",
-      important: true,
-    },
-    {
-      id: "CustomerIndividual.LastName",
-      type: "text",
-      label: "Individual.LastName",
-      important: true,
-    },
-    {
-      id: "CustomerIndividual.EmailAddress",
-      type: "text",
-      label: "Individual.EmailAddress",
-      important: true,
-    },
-    {
-      id: "CustomerIndividual.PhoneNumber",
-      type: "text",
-      label: "Individual.PhoneNumber",
-      important: true,
-    },
-  ];
-
-  const getNestedFieldValue = (
-    data: CustomerInfo,
-    id: NestedCustomerInfoKey
-  ): string => {
-    const keys = id.split(".");
-    if (keys.length === 1) {
-      return data[keys[0] as keyof CustomerInfo]
-        ? data[keys[0] as keyof CustomerInfo]!.toString()
-        : "không có dữ liệu";
-    } else if (keys.length === 2) {
-      const [parentKey, childKey] = keys;
-      if (parentKey === "CustomerStore" && data.CustomerStore) {
-        return data.CustomerStore[childKey as keyof CustomerStore]
-          ? data.CustomerStore[childKey as keyof CustomerStore]!.toString()
-          : "không có dữ liệu";
-      } else if (
-        parentKey === "CustomerIndividual" &&
-        data.CustomerIndividual
-      ) {
-        return data.CustomerIndividual[childKey as keyof CustomerIndividual]
-          ? data.CustomerIndividual[
-              childKey as keyof CustomerIndividual
-            ]!.toString()
-          : "không có dữ liệu";
-      }
-    }
-    return "không có dữ liệu";
-  };
-
-  console.log(userDetail);
+      {
+        id: "CustomerStore.Name",
+        type: "text",
+        label: "Store.Name",
+        important: true,
+      },
+      {
+        id: "CustomerStore.BusinessType",
+        type: "text",
+        label: "Store.BusinessType",
+        important: true,
+      },
+      {
+        id: "CustomerStore.Specialty",
+        type: "text",
+        label: "Store.Specialty",
+        important: true,
+      },
+      {
+        id: "CustomerStore.AnnualSales",
+        type: "text",
+        label: "Store.AnnualSales",
+        important: true,
+      },
+      {
+        id: "CustomerStore.AnnualRevenue",
+        type: "text",
+        label: "Store.AnnualRevenue",
+        important: true,
+      },
+      {
+        id: "CustomerIndividual.LastName",
+        type: "text",
+        label: "Individual.LastName",
+        important: true,
+      },
+      {
+        id: "CustomerIndividual.EmailAddress",
+        type: "text",
+        label: "Individual.EmailAddress",
+        important: true,
+      },
+      {
+        id: "CustomerIndividual.PhoneNumber",
+        type: "text",
+        label: "Individual.PhoneNumber",
+        important: true,
+      },
+    ];
 
   const options = [
     {
@@ -337,18 +305,17 @@ const UsersMain = () => {
       <div className="sticky top-0 w-full flex gap-2 z-10 bg-white dark:bg-[#242526] h-12 min-h-12 px-2 justify-center place-items-center">
         <div className="gap-1 px-1 flex">
           <FaAngleLeft
-            className={`w-5 h-5 ${
-              page == 0 ? "text-gray-500 dark:text-darkContainerPrimary" : ""
-            }`}
+            className={`w-5 h-5 ${page == 0 ? "text-gray-500 dark:text-darkContainerPrimary" : ""
+              }`}
             onClick={() => {
               paginate(0);
             }}
           />
           <FaAngleRight
-            className={`w-5 h-5 ${
-              page == 1 ? "text-gray-500 dark:text-darkContainerPrimary" : ""
-            }`}
+            className={`w-5 h-5 ${page == 1 || !openUserDetail ? "text-gray-500 dark:text-darkContainerPrimary" : ""
+              }`}
             onClick={() => {
+              if (page == 1 || !openUserDetail) return;
               paginate(1);
             }}
           />
@@ -383,16 +350,15 @@ const UsersMain = () => {
                   dragElastic={1}
                   onDragEnd={(_e, { offset, velocity }) => {
                     const swipe = swipePower(offset.x, velocity.x);
-
+                    if (!openUserDetail) return;
                     if (swipe < -swipeConfidenceThreshold) {
                       paginate(Math.min(page + 1, options.length - 1));
                     } else if (swipe > swipeConfidenceThreshold) {
                       paginate(Math.max(page - 1, 0));
                     }
                   }}
-                  className={`inset-0 flex flex-col gap-4 w-full h-full overflow-y-auto no-scrollbar place-items-center ${
-                    page === 1 ? "mb-2" : ""
-                  }`}
+                  className={`inset-0 flex flex-col gap-4 w-full h-full overflow-y-auto no-scrollbar place-items-center ${page === 1 ? "mb-2" : ""
+                    }`}
                 >
                   {indexoption.component}
                 </motion.div>
@@ -400,29 +366,6 @@ const UsersMain = () => {
           )}
         </AnimatePresence>
       </div>
-      <RenderCase renderIf={page === 1}>
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          exit="exit"
-          className="w-full px-2 pb-2"
-        >
-          <button
-            // onClick={submit}
-            className="linear w-full !rounded-md bg-brand-500 py-[10px] text-base font-medium text-white transition duration-200 
-                        hover:bg-brand-600 active:bg-brand-700 dark:text-white dark:hover:bg-brand-300 dark:active:bg-brand-200 flex justify-center"
-          >
-            {loading ? (
-              <LoadingUI />
-            ) : openUserDetail ? (
-              intl.formatMessage({ id: "EditButton" })
-            ) : (
-              intl.formatMessage({ id: "AddButtonConfirm" })
-            )}
-          </button>
-        </motion.div>
-      </RenderCase>
     </div>
   );
 };
