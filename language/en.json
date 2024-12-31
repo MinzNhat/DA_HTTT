@@ -153,5 +153,14 @@
   "SpcOffer.LessThan": "must be less than",
   "SpcOffer.MinQty": "Minimum Quantity",
   "SpcOffer.MaxQty": "Maximum Quantity",
-  "SpcOffer.Range": "must be greater than 0 and less than 1"
+  "SpcOffer.Range": "must be greater than 0 and less than 1",
+  "AddSuccess": "Add successful",
+  "Add1": "Confirm add",
+  "Add2": "selected data to the product with id:",
+  "NoSelected2": "Please select data to add",
+  "DiscountTitle": "Product discount list",
+  "AddFail": "Add failed",
+  "NoDiscountData": "No discount data",
+  "NoDiscountData2": "No discount data in the product",
+  "AddDiscount": "Add discount to product"
 }

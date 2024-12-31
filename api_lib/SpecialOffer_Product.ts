@@ -1,11 +1,12 @@
 import axios from "axios";
+import { SpecialOfferInfo } from "./SpecialOffer";
 
 interface SpecialOfferProductPayload {
   token: string;
 }
 
 export interface GetSpecialOfferProduct {
-  productID: string;
+  productID: number;
 }
 
 export interface CreateSpecialOfferProduct {
@@ -27,7 +28,7 @@ export class SpecialOfferProductrOperation {
 
   async getSpecialOffer(payload: SpecialOfferProductPayload, getData: GetSpecialOfferProduct) {
     try {
-      const response = await axios.post(`${this.baseUrl}/getallspecialoffer/`, getData, {
+      const response = await axios.post(`${this.baseUrl}/getallspecialofferproduct/`, getData, {
         headers: {
           Authorization: `Bearer ${payload.token}`,
           "Content-Type": "application/json",
@@ -35,7 +36,7 @@ export class SpecialOfferProductrOperation {
       });
 
       return response.status >= 200 || response.status < 300
-        ? { error: false, data: response.data as string[] }
+        ? { error: false, data: response.data as SpecialOfferInfo[] }
         : { error: true, data: null };
     } catch (err: any) {
       return { error: true, data: null };
@@ -48,7 +49,7 @@ export class SpecialOfferProductrOperation {
   ) {
     try {
       const response = await axios.post(
-        `${this.baseUrl}/deletespecialoffer/`,
+        `${this.baseUrl}/deletespecialofferproduct/`,
         updateData,
         {
           headers: {
@@ -62,6 +63,7 @@ export class SpecialOfferProductrOperation {
         ? { error: false, data: true }
         : { error: true, data: null };
     } catch (err: any) {
+      console.log(err)
       return { error: true, data: null };
     }
   }

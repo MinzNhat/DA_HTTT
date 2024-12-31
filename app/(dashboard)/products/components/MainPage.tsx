@@ -336,21 +336,20 @@ const ProductsMain = () => {
             id: 1,
             component: openProductDetail ? (
                 <div className="flex flex-col lg:flex-row gap-4 w-full h-full p-4">
-                    <div className="flex w-full flex-col gap-4">
+                    <div className="flex w-full lg:w-1/2 flex-col gap-4">
                         <ProductFields
                             data={productDetail}
                             handleChange={handleChange}
                             fields={productFields}
                         />
                     </div>
-                    <div className="flex w-full flex-col gap-4">
-                        <SpcOfferList />
+                    <div className="flex w-full lg:w-1/2 flex-col gap-4">
+                        <SpcOfferList productID={productDetail.id} />
                     </div>
                 </div>
 
             ) : (
                 <div className="flex flex-col gap-4 w-full h-full md:w-1/2 p-4">
-
                     <ProductFields
                         data={productData}
                         handleChange={handleChange2}

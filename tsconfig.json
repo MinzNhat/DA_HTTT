@@ -35,7 +35,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "app/(dashboard)/vehicles/components/AddVehicletsx"
+    "app/(dashboard)/vehicles/components/AddVehicletsx",
+    "app/(dashboard)/products/components/variable/columnsData2tsx"
   ],
   "exclude": [
     "node_modules"

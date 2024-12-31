@@ -1,13 +1,14 @@
 "use client";
 
 import { ProductInfo } from "@/api_lib/Product";
+import { SpecialOfferInfo } from "@/api_lib/SpecialOffer";
 import { Button } from "@nextui-org/react";
 import { MdRestartAlt, MdOutlineAddCircleOutline, MdOutlineRemoveCircleOutline } from "react-icons/md";
 import { FormattedMessage } from "react-intl";
 
 interface CustomButtonProps {
     fetchData: () => void;
-    selectedRows: ProductInfo[];
+    selectedRows: ProductInfo[] | SpecialOfferInfo[];
     openAdd: () => void;
     handleDelete: () => void;
 }
